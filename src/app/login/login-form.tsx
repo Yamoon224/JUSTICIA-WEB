@@ -4,6 +4,19 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import type { FormEvent } from "react";
 
+/**
+ * N'autorise que les chemins relatifs internes à l'application pour la
+ * redirection post-connexion : un `?next=` forgé (URL absolue,
+ * protocol-relative `//`, `/\`...) ne doit jamais pouvoir rediriger l'agent
+ * hors du domaine JUSTICIA (open redirect).
+ */
+function safeNextPath(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.startsWith("/\\")) {
+    return "/";
+  }
+  return value;
+}
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,7 +43,7 @@ export function LoginForm() {
         return;
       }
 
-      router.replace(searchParams.get("next") ?? "/");
+      router.replace(safeNextPath(searchParams.get("next")));
       router.refresh();
     } finally {
       setIsSubmitting(false);
