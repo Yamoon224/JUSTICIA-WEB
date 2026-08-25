@@ -86,6 +86,7 @@ export const MODULES: ModuleDescriptor[] = [
     description: "Rôle d'audience, décisions, minutes, voies de recours.",
     icon: "audiencement",
     permissions: ["audiencement.gerer"],
+    href: "/audiencement",
   },
   {
     slug: "execution",

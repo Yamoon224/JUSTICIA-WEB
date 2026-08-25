@@ -50,3 +50,23 @@ export async function listerMagistrats(): Promise<MagistratReferentiel[]> {
 export async function listerJugesInstruction(): Promise<MagistratReferentiel[]> {
   return backendFetch<MagistratReferentiel[]>("/referentiels/juges-instruction");
 }
+
+export async function listerJugesAudience(): Promise<MagistratReferentiel[]> {
+  return backendFetch<MagistratReferentiel[]>("/referentiels/juges-audience");
+}
+
+export async function listerGreffiers(): Promise<MagistratReferentiel[]> {
+  return backendFetch<MagistratReferentiel[]>("/referentiels/greffiers");
+}
+
+export interface JuridictionReferentiel {
+  id: number;
+  code: string;
+  nom: string;
+  type: string | null;
+  ressort_id: number;
+}
+
+export async function listerJuridictions(): Promise<JuridictionReferentiel[]> {
+  return backendFetch<JuridictionReferentiel[]>("/referentiels/juridictions");
+}
