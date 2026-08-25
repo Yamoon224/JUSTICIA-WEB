@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CalendarClock, Gavel, Scale, ScrollText } from "lucide-react";
+import { ArrowLeft, CalendarClock, Gavel, Landmark, Scale, ScrollText } from "lucide-react";
 
 import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, Select, SubmitButton, TextInput } from "@/components/ui";
 import {
@@ -9,8 +9,10 @@ import {
   actionIntegrerDecisionRecours,
   actionRenvoyer,
 } from "@/features/audiencement/actions";
+import { actionMettreAExecution } from "@/features/execution/actions";
 import { obtenirDossierAudiencement } from "@/lib/api/audiencement";
 import { listerGreffiers, listerJugesAudience, listerJuridictions } from "@/lib/api/referentiels";
+import { getCurrentAgent } from "@/lib/auth/current-agent";
 import type { DecisionType, TypeRecours } from "@/types/audiencement";
 
 export const metadata = { title: "Dossier d'audiencement — JUSTICIA" };
@@ -37,10 +39,11 @@ export default async function DossierAudiencementPage({
 }) {
   const { id } = await params;
   const { erreur } = await searchParams;
-  const dossier = await obtenirDossierAudiencement(Number(id));
+  const [dossier, agent] = await Promise.all([obtenirDossierAudiencement(Number(id)), getCurrentAgent()]);
   const affaire = dossier.affaire;
   const estAEnroler = dossier.statut === "a_enroler";
   const estEnrole = dossier.statut !== "a_enroler";
+  const peutMettreAExecution = agent?.permissions.includes("execution.gerer") ?? false;
 
   const [juridictions, juges, greffiers] = estAEnroler
     ? await Promise.all([listerJuridictions(), listerJugesAudience(), listerGreffiers()])
@@ -201,6 +204,40 @@ export default async function DossierAudiencementPage({
                   <p className="text-xs text-ink-faint">
                     Délai de recours jusqu&apos;au {new Date(decision.delai_recours_expire_at).toLocaleDateString("fr-FR")}
                   </p>
+
+                  {decision.decision === "condamnation" && (
+                    <div className="border-t border-line pt-3">
+                      {decision.dossier_execution_id ? (
+                        <Link
+                          href={`/execution/${decision.dossier_execution_id}`}
+                          className="inline-flex w-fit items-center gap-1.5 text-sm text-seal hover:underline"
+                        >
+                          <Landmark size={14} />
+                          Voir le dossier d&apos;exécution →
+                        </Link>
+                      ) : decision.est_definitive ? (
+                        peutMettreAExecution ? (
+                          <form action={actionMettreAExecution}>
+                            <input type="hidden" name="decision_id" value={decision.id} />
+                            <input type="hidden" name="retour" value={`/audiencement/${dossier.id}`} />
+                            <SubmitButton variant="secondary">
+                              <Landmark size={16} />
+                              Mettre à exécution
+                            </SubmitButton>
+                          </form>
+                        ) : (
+                          <p className="flex items-center gap-1.5 text-xs text-ink-faint">
+                            <Landmark size={13} />
+                            Décision définitive — mise à exécution à la charge du service pénitentiaire.
+                          </p>
+                        )
+                      ) : (
+                        <p className="text-xs text-ink-faint">
+                          Mise à exécution possible une fois la décision définitive.
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   {decision.recours && decision.recours.length > 0 && (
                     <ul className="flex flex-col gap-2 border-t border-line pt-3">

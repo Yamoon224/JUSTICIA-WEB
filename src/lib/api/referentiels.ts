@@ -70,3 +70,15 @@ export interface JuridictionReferentiel {
 export async function listerJuridictions(): Promise<JuridictionReferentiel[]> {
   return backendFetch<JuridictionReferentiel[]>("/referentiels/juridictions");
 }
+
+export interface EtablissementPenitentiaireReferentiel {
+  id: number;
+  code: string;
+  nom: string;
+  ressort_id: number;
+  capacite: number | null;
+}
+
+export async function listerEtablissementsPenitentiaires(): Promise<EtablissementPenitentiaireReferentiel[]> {
+  return backendFetch<EtablissementPenitentiaireReferentiel[]>("/referentiels/etablissements-penitentiaires");
+}

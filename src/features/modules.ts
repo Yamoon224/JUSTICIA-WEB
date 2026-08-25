@@ -94,6 +94,7 @@ export const MODULES: ModuleDescriptor[] = [
     description: "Registre d'écrou, situations pénales, aménagements de peine.",
     icon: "execution",
     permissions: ["execution.gerer"],
+    href: "/execution",
   },
   {
     slug: "casier",

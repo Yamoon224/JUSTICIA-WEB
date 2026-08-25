@@ -38,6 +38,8 @@ export interface Decision {
   delai_recours_expire_at: string;
   est_definitive: boolean;
   recours?: Recours[];
+  /** Présent (sinon absent) dès qu'un dossier d'exécution (§6.9) existe pour cette décision. */
+  dossier_execution_id?: number | null;
 }
 
 export interface DossierAudiencement {
