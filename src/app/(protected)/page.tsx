@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { getCurrentAgent } from "@/lib/auth/current-agent";
 import { MODULES } from "@/features/modules";
 
@@ -15,15 +17,29 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {accessible.map((module) => (
-          <div
-            key={module.slug}
-            className="flex flex-col gap-1 rounded-lg border border-zinc-200 bg-white p-4"
-          >
-            <span className="text-sm font-medium text-zinc-900">{module.label}</span>
-            <span className="text-xs text-zinc-500">{module.description}</span>
-          </div>
-        ))}
+        {accessible.map((module) => {
+          const contenu = (
+            <>
+              <span className="text-sm font-medium text-zinc-900">{module.label}</span>
+              <span className="text-xs text-zinc-500">{module.description}</span>
+              {!module.href && <span className="text-xs italic text-zinc-400">Interface à venir</span>}
+            </>
+          );
+
+          return module.href ? (
+            <Link
+              key={module.slug}
+              href={module.href}
+              className="flex flex-col gap-1 rounded-lg border border-zinc-200 bg-white p-4 transition-colors hover:border-zinc-400"
+            >
+              {contenu}
+            </Link>
+          ) : (
+            <div key={module.slug} className="flex flex-col gap-1 rounded-lg border border-zinc-200 bg-white p-4 opacity-60">
+              {contenu}
+            </div>
+          );
+        })}
 
         {accessible.length === 0 && (
           <p className="text-sm text-zinc-500">

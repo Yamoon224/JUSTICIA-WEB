@@ -12,6 +12,8 @@ export interface ModuleDescriptor {
   description: string;
   /** Une seule de ces permissions suffit à rendre le module visible. */
   permissions: string[];
+  /** Absent tant que le module n'a pas encore d'interface (§10.2). */
+  href?: string;
 }
 
 export const MODULES: ModuleDescriptor[] = [
@@ -20,18 +22,21 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Interpellation & garde à vue",
     description: "Registre de garde à vue, délais légaux, actes durant la mesure.",
     permissions: ["gav.gerer"],
+    href: "/affaires",
   },
   {
     slug: "identification",
     label: "Identification des personnes",
     description: "Fichier central des personnes mises en cause, statuts par affaire.",
     permissions: ["personnes.gerer", "personnes.consulter"],
+    href: "/personnes",
   },
   {
     slug: "affaires",
     label: "Affaires & procès-verbaux",
     description: "Dossiers d'affaire, procès-verbaux, pièces et scellés.",
     permissions: ["affaires.gerer", "affaires.consulter"],
+    href: "/affaires",
   },
   {
     slug: "parquet",
