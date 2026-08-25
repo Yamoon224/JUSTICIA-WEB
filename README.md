@@ -35,7 +35,10 @@ partagées dans `src/components/ui.tsx`, shell applicatif responsive
   - Instruction : cabinet, mise en examen, mesures de sûreté (contrôle
     judiciaire, détention provisoire), mandats, actes, ordonnance de
     règlement — `src/features/instruction`.
-- ⏳ Phases 5 à 9 : à venir.
+- ✅ **Phase 5 — Audiencement & jugement** (§6.7-6.8) : enrôlement, renvois,
+  décisions par prévenu (mise à jour immédiate du statut), caractère
+  définitif, voies de recours — `src/features/audiencement`.
+- ⏳ Phases 6 à 9 : à venir.
 
 ## Démarrage
 
