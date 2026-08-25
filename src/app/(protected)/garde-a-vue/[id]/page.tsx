@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { AlarmClock, ArrowLeft, ClipboardList, DoorOpen, Gavel, ShieldAlert, UserCheck } from "lucide-react";
 
-import { Badge, Card, ErrorBanner, Field, Select, SubmitButton, TextArea, TextInput } from "@/components/form";
+import { Badge, Card, ErrorBanner, Field, Select, SubmitButton, TextArea, TextInput } from "@/components/ui";
 import {
   actionAviserRepresentantLegal,
   actionCloturerGardeAVue,
@@ -35,75 +36,88 @@ export default async function MesureGardeAVuePage({
 
   const droitsNotifies = new Set(mesure.notifications_droits?.map((n) => n.droit));
   const droitsRestants = (Object.keys(LIBELLES_DROITS) as DroitGav[]).filter((droit) => !droitsNotifies.has(droit));
+  const enCours = mesure.statut !== "terminee";
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Garde à vue #{mesure.id}</h1>
-          <div className="mt-1 flex gap-2">
-            <Badge tone={mesure.statut === "terminee" ? "green" : "zinc"}>{mesure.statut}</Badge>
-            {mesure.mineur && <Badge tone="amber">mineur</Badge>}
-            {mesure.echeance_depassee && <Badge tone="red">échéance dépassée</Badge>}
-          </div>
+      <div className="flex flex-col gap-3">
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">§6.1 — Garde à vue</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">Mesure #{mesure.id}</h1>
+          <Badge tone={mesure.statut === "terminee" ? "forest" : "neutral"}>{mesure.statut.replaceAll("_", " ")}</Badge>
+          {mesure.mineur && <Badge tone="gold">mineur</Badge>}
         </div>
       </div>
 
       <ErrorBanner message={erreur} />
 
-      <Card title="Échéance (§6.1, §6.11)">
-        <dl className="grid grid-cols-2 gap-y-2 text-sm">
-          <dt className="text-zinc-500">Début</dt>
-          <dd>{new Date(mesure.debut_at).toLocaleString("fr-FR")}</dd>
-          <dt className="text-zinc-500">Durée</dt>
-          <dd>{mesure.duree_heures} h</dd>
-          <dt className="text-zinc-500">Fin prévue</dt>
-          <dd>{new Date(mesure.fin_prevue_at).toLocaleString("fr-FR")}</dd>
+      {mesure.echeance_depassee && enCours && (
+        <div className="flex items-center gap-3 rounded-2xl border border-rust/30 bg-rust-tint px-5 py-4 text-rust">
+          <ShieldAlert size={20} className="shrink-0" />
+          <p className="text-sm font-medium">Échéance légale dépassée — signalement prioritaire requis (§6.11).</p>
+        </div>
+      )}
+
+      <Card>
+        <div className="flex items-center gap-3 border-b border-line pb-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-seal-tint text-seal-strong">
+            <AlarmClock size={18} />
+          </span>
+          <div className="flex flex-col">
+            <span className="text-xs uppercase tracking-wide text-ink-faint">Échéance</span>
+            <span className="font-display text-base font-medium text-ink">
+              {new Date(mesure.fin_prevue_at).toLocaleString("fr-FR", { dateStyle: "long", timeStyle: "short" })}
+            </span>
+          </div>
+        </div>
+        <dl className="grid grid-cols-2 gap-y-3 text-sm">
+          <dt className="text-ink-soft">Début</dt>
+          <dd className="text-ink">{new Date(mesure.debut_at).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })}</dd>
+          <dt className="text-ink-soft">Durée</dt>
+          <dd className="text-ink">{mesure.duree_heures} h</dd>
           {mesure.issue && (
             <>
-              <dt className="text-zinc-500">Issue</dt>
-              <dd>{mesure.issue}</dd>
+              <dt className="text-ink-soft">Issue</dt>
+              <dd className="text-ink">{mesure.issue.replaceAll("_", " ")}</dd>
             </>
           )}
         </dl>
-      </Card>
 
-      {mesure.statut !== "terminee" && (
-        <Card title="Prolongation (autorisation parquet — §6.1)">
-          <form action={actionProlongerGardeAVue} className="flex flex-wrap items-end gap-3">
+        {enCours && (
+          <form action={actionProlongerGardeAVue} className="flex flex-wrap items-end gap-3 border-t border-line pt-4">
             <input type="hidden" name="mesure_id" value={mesure.id} />
-            <Field label="Heures" htmlFor="heures">
+            <Field label="Prolonger de (heures)" htmlFor="heures">
               <TextInput id="heures" name="heures" type="number" min={1} max={96} required className="w-24" />
             </Field>
-            <Field label="ID magistrat autorisant" htmlFor="autorise_par_id">
-              <TextInput id="autorise_par_id" name="autorise_par_id" type="number" required className="w-40" />
+            <Field label="ID magistrat autorisant" htmlFor="autorise_par_id" hint="autorisation parquet — §6.1">
+              <TextInput id="autorise_par_id" name="autorise_par_id" type="number" required className="w-44" />
             </Field>
-            <SubmitButton>Prolonger</SubmitButton>
+            <SubmitButton variant="secondary">Prolonger</SubmitButton>
           </form>
-        </Card>
-      )}
+        )}
+      </Card>
 
-      <Card title="Notification des droits (§6.1)">
-        <ul className="flex flex-col gap-1 text-sm">
+      <Card title="Notification des droits">
+        <ul className="flex flex-col divide-y divide-line">
           {(Object.keys(LIBELLES_DROITS) as DroitGav[]).map((droit) => {
             const notification = mesure.notifications_droits?.find((n) => n.droit === droit);
             return (
-              <li key={droit} className="flex items-center justify-between">
-                <span>{LIBELLES_DROITS[droit]}</span>
+              <li key={droit} className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0 text-sm">
+                <span className="text-ink">{LIBELLES_DROITS[droit]}</span>
                 {notification ? (
-                  <Badge tone="green">
+                  <Badge tone="forest">
                     notifié {notification.notifie_at && new Date(notification.notifie_at).toLocaleTimeString("fr-FR")}
                   </Badge>
                 ) : (
-                  <Badge tone="amber">non notifié</Badge>
+                  <Badge tone="gold">non notifié</Badge>
                 )}
               </li>
             );
           })}
         </ul>
 
-        {mesure.statut !== "terminee" && droitsRestants.length > 0 && (
-          <form action={actionNotifierDroitGardeAVue} className="flex flex-wrap items-end gap-3 border-t border-zinc-100 pt-3">
+        {enCours && droitsRestants.length > 0 && (
+          <form action={actionNotifierDroitGardeAVue} className="flex flex-wrap items-end gap-3 border-t border-line pt-4">
             <input type="hidden" name="mesure_id" value={mesure.id} />
             <Field label="Droit" htmlFor="droit">
               <Select id="droit" name="droit" required>
@@ -117,62 +131,74 @@ export default async function MesureGardeAVuePage({
             <Field label="Mode de remise" htmlFor="mode_de_remise">
               <TextInput id="mode_de_remise" name="mode_de_remise" placeholder="oral, écrit..." required />
             </Field>
-            <SubmitButton>Notifier</SubmitButton>
+            <SubmitButton variant="secondary">Notifier</SubmitButton>
           </form>
         )}
       </Card>
 
       {mesure.mineur && (
-        <Card title="Régime mineur (§6.1)">
+        <Card title="Régime mineur">
           {mesure.avis_representant_legal_at ? (
-            <Badge tone="green">
+            <div className="flex items-center gap-2 text-sm text-forest">
+              <UserCheck size={16} />
               Représentant légal avisé le {new Date(mesure.avis_representant_legal_at).toLocaleString("fr-FR")}
-            </Badge>
+            </div>
           ) : (
             <form action={actionAviserRepresentantLegal}>
               <input type="hidden" name="mesure_id" value={mesure.id} />
-              <SubmitButton>Aviser le représentant légal</SubmitButton>
+              <SubmitButton variant="secondary">
+                <UserCheck size={16} />
+                Aviser le représentant légal
+              </SubmitButton>
             </form>
           )}
         </Card>
       )}
 
-      <Card title="Actes durant la mesure (§6.1)">
-        <ul className="flex flex-col gap-1 text-sm">
-          {mesure.actes?.map((acte, index) => (
-            <li key={index} className="flex justify-between text-zinc-700">
-              <span>{acte.type}</span>
-              <span className="text-zinc-500">{new Date(acte.debut_at).toLocaleString("fr-FR")}</span>
-            </li>
-          ))}
-          {!mesure.actes?.length && <li className="text-zinc-500">Aucun acte enregistré.</li>}
-        </ul>
+      <Card title="Actes durant la mesure">
+        {mesure.actes?.length ? (
+          <ul className="flex flex-col divide-y divide-line">
+            {mesure.actes.map((acte, index) => (
+              <li key={index} className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0 text-sm">
+                <span className="flex items-center gap-2 text-ink">
+                  <ClipboardList size={14} className="text-ink-faint" />
+                  {acte.type.replaceAll("_", " ")}
+                </span>
+                <span className="text-ink-faint">{new Date(acte.debut_at).toLocaleString("fr-FR")}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-ink-faint">Aucun acte enregistré.</p>
+        )}
 
-        {mesure.statut !== "terminee" && (
-          <form action={actionEnregistrerActeGardeAVue} className="flex flex-col gap-3 border-t border-zinc-100 pt-3">
+        {enCours && (
+          <form action={actionEnregistrerActeGardeAVue} className="flex flex-col gap-3 border-t border-line pt-4">
             <input type="hidden" name="mesure_id" value={mesure.id} />
-            <Field label="Type d'acte" htmlFor="type-acte">
-              <Select id="type-acte" name="type" required>
-                {TYPES_ACTES.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field label="Début" htmlFor="debut_at">
-              <TextInput id="debut_at" name="debut_at" type="datetime-local" required />
-            </Field>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Field label="Type d'acte" htmlFor="type-acte">
+                <Select id="type-acte" name="type" required>
+                  {TYPES_ACTES.map((type) => (
+                    <option key={type} value={type}>
+                      {type.replaceAll("_", " ")}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Début" htmlFor="debut_at">
+                <TextInput id="debut_at" name="debut_at" type="datetime-local" required />
+              </Field>
+            </div>
             <Field label="Notes" htmlFor="notes">
               <TextArea id="notes" name="notes" rows={2} />
             </Field>
-            <SubmitButton>Enregistrer l&apos;acte</SubmitButton>
+            <SubmitButton variant="secondary">Enregistrer l&apos;acte</SubmitButton>
           </form>
         )}
       </Card>
 
-      {mesure.statut !== "terminee" && (
-        <Card title="Clôture (§6.1 — issue obligatoire)">
+      {enCours && (
+        <Card title="Clôture" description="Issue obligatoire à la sortie de la mesure.">
           <form action={actionCloturerGardeAVue} className="flex flex-wrap items-end gap-3">
             <input type="hidden" name="mesure_id" value={mesure.id} />
             <Field label="Issue" htmlFor="issue">
@@ -182,13 +208,24 @@ export default async function MesureGardeAVuePage({
                 <option value="deferement">Déferrement au parquet</option>
               </Select>
             </Field>
-            <SubmitButton>Clôturer la mesure</SubmitButton>
+            <SubmitButton>
+              <Gavel size={16} />
+              Clôturer la mesure
+            </SubmitButton>
           </form>
         </Card>
       )}
 
-      <Link href={`/affaires/${mesure.affaire_id}`} className="text-sm text-zinc-500 hover:underline">
-        ← Retour à l&apos;affaire
+      {!enCours && mesure.issue === "deferement" && (
+        <div className="flex items-center gap-3 rounded-2xl border border-seal/25 bg-seal-tint px-5 py-4 text-seal-strong">
+          <DoorOpen size={18} className="shrink-0" />
+          <p className="text-sm">Personne déférée au parquet — orientation à suivre dans le module Parquet.</p>
+        </div>
+      )}
+
+      <Link href={`/affaires/${mesure.affaire_id}`} className="inline-flex w-fit items-center gap-1.5 text-sm text-ink-soft hover:text-seal">
+        <ArrowLeft size={15} />
+        Retour à l&apos;affaire
       </Link>
     </div>
   );

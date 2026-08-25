@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { LogoutButton } from "@/components/logout-button";
+import { AppShell } from "@/components/app-shell";
+import { MODULES } from "@/features/modules";
 import { getCurrentAgent } from "@/lib/auth/current-agent";
 
 /**
@@ -16,20 +17,11 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
     redirect("/login");
   }
 
-  return (
-    <div className="flex min-h-full flex-1 flex-col">
-      <header className="flex items-center justify-between border-b border-zinc-200 bg-white px-6 py-4">
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold text-zinc-900">JUSTICIA</span>
-          <span className="text-xs text-zinc-500">
-            {agent.nom_complet} · {agent.matricule}
-            {agent.service ? ` · ${agent.service.nom}` : ""}
-          </span>
-        </div>
-        <LogoutButton />
-      </header>
+  const modules = MODULES.filter((module) => module.permissions.some((permission) => agent.permissions.includes(permission)));
 
-      <main className="flex flex-1 flex-col px-6 py-8">{children}</main>
-    </div>
+  return (
+    <AppShell agent={agent} modules={modules}>
+      {children}
+    </AppShell>
   );
 }

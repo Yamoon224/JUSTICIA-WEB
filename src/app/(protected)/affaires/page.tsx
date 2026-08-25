@@ -1,19 +1,20 @@
 import Link from "next/link";
+import { FolderPlus } from "lucide-react";
 
-import { Badge } from "@/components/form";
+import { Badge, EmptyState, LinkButton, Mono, PageHeader } from "@/components/ui";
 import { listerAffaires } from "@/lib/api/affaires";
 import type { StatutAffaire } from "@/types/affaire";
 
 export const metadata = { title: "Affaires — JUSTICIA" };
 
-const TONE_PAR_STATUT: Record<StatutAffaire, "zinc" | "green" | "amber" | "red"> = {
-  ouverte: "zinc",
-  transmise_parquet: "amber",
-  classee_sans_suite: "red",
-  information_ouverte: "amber",
-  audiencee: "amber",
-  jugee: "green",
-  cloturee: "green",
+const TONE_PAR_STATUT: Record<StatutAffaire, "neutral" | "forest" | "gold" | "rust"> = {
+  ouverte: "neutral",
+  transmise_parquet: "gold",
+  classee_sans_suite: "rust",
+  information_ouverte: "gold",
+  audiencee: "gold",
+  jugee: "forest",
+  cloturee: "forest",
 };
 
 export default async function AffairesPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
@@ -22,58 +23,42 @@ export default async function AffairesPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Affaires</h1>
-          <p className="text-sm text-zinc-500">Dossiers de votre ressort (§6.3, §8).</p>
+      <PageHeader
+        eyebrow="§6.3 — Dossiers"
+        title="Affaires"
+        description="Dossiers de votre ressort, de l'ouverture à la transmission au parquet."
+        actions={
+          <LinkButton href="/affaires/nouvelle">
+            <FolderPlus size={16} />
+            Ouvrir une affaire
+          </LinkButton>
+        }
+      />
+
+      {affaires.data.length === 0 ? (
+        <EmptyState message="Aucune affaire dans votre ressort." />
+      ) : (
+        <div className="flex flex-col gap-3">
+          {affaires.data.map((affaire) => (
+            <Link
+              key={affaire.id}
+              href={`/affaires/${affaire.id}`}
+              className="group flex flex-col gap-2 rounded-2xl border border-line bg-paper-raised p-4 shadow-[var(--shadow-card)] transition-all hover:-translate-y-0.5 hover:border-seal/30 sm:flex-row sm:items-center sm:justify-between [border-left:3px_solid_var(--seal)]"
+            >
+              <div className="flex flex-col gap-1">
+                <Mono className="font-medium text-ink group-hover:text-seal">{affaire.numero_affaire}</Mono>
+                <span className="text-sm text-ink-soft">{affaire.description || "Aucune description."}</span>
+              </div>
+              <Badge tone={TONE_PAR_STATUT[affaire.statut]}>{affaire.statut.replaceAll("_", " ")}</Badge>
+            </Link>
+          ))}
         </div>
-        <Link
-          href="/affaires/nouvelle"
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700"
-        >
-          Ouvrir une affaire
-        </Link>
-      </div>
-
-      <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase text-zinc-500">
-            <tr>
-              <th className="px-4 py-2">Numéro</th>
-              <th className="px-4 py-2">Statut</th>
-              <th className="px-4 py-2">Ouverture</th>
-            </tr>
-          </thead>
-          <tbody>
-            {affaires.data.map((affaire) => (
-              <tr key={affaire.id} className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50">
-                <td className="px-4 py-2">
-                  <Link href={`/affaires/${affaire.id}`} className="font-medium text-zinc-900 hover:underline">
-                    {affaire.numero_affaire}
-                  </Link>
-                </td>
-                <td className="px-4 py-2">
-                  <Badge tone={TONE_PAR_STATUT[affaire.statut]}>{affaire.statut}</Badge>
-                </td>
-                <td className="px-4 py-2 text-zinc-500">{affaire.date_ouverture ?? "—"}</td>
-              </tr>
-            ))}
-
-            {affaires.data.length === 0 && (
-              <tr>
-                <td colSpan={3} className="px-4 py-6 text-center text-zinc-500">
-                  Aucune affaire dans votre ressort.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      )}
 
       {affaires.meta.last_page > 1 && (
-        <div className="flex gap-2 text-sm text-zinc-500">
+        <p className="text-sm text-ink-faint">
           Page {affaires.meta.current_page} / {affaires.meta.last_page}
-        </div>
+        </p>
       )}
     </div>
   );

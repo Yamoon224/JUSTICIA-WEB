@@ -1,26 +1,126 @@
 @import "tailwindcss";
 
+/*
+ * Système JUSTICIA — « registre & sceau ».
+ * Fond papier chaud, encre presque noire, accent lie-de-vin (le sceau
+ * officiel) et or bruni pour les états d'attente — vocabulaire directement
+ * tiré du sujet (dossiers, scellés, signatures) plutôt qu'une palette SaaS
+ * générique. Le liseré de 3px en couleur de sceau marque tout enregistrement
+ * officiel (une affaire, un PV, un scellé, une mesure) — voir chaque module.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --paper: #faf8f4;
+  --paper-raised: #ffffff;
+  --paper-sunken: #f2efe8;
+  --ink: #211e1b;
+  --ink-soft: #6b6459;
+  --ink-faint: #a39c8d;
+  --line: #e4dfd5;
+  --line-strong: #cfc7b8;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --seal: #7a2331;
+  --seal-strong: #5c1a24;
+  --seal-tint: #f3e3e1;
+  --seal-tint-strong: #e9cdc9;
+
+  --gold: #8f6a1c;
+  --gold-tint: #f3e9d6;
+
+  --forest: #2f5a44;
+  --forest-tint: #e4eee7;
+
+  --rust: #ad4025;
+  --rust-tint: #f7e3dc;
+
+  --shadow-card: 0 1px 2px rgb(33 30 27 / 0.04), 0 8px 24px -12px rgb(33 30 27 / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #181613;
+    --paper-raised: #211e1a;
+    --paper-sunken: #14120f;
+    --ink: #f1ece2;
+    --ink-soft: #b0a696;
+    --ink-faint: #746c5d;
+    --line: #322d25;
+    --line-strong: #443d31;
+
+    --seal: #e08e93;
+    --seal-strong: #eda8ac;
+    --seal-tint: #3a2224;
+    --seal-tint-strong: #4a2b2e;
+
+    --gold: #d3ab5c;
+    --gold-tint: #362b16;
+
+    --forest: #7fb89b;
+    --forest-tint: #1c2c23;
+
+    --rust: #e08363;
+    --rust-tint: #3a2318;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-paper-sunken: var(--paper-sunken);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-seal: var(--seal);
+  --color-seal-strong: var(--seal-strong);
+  --color-seal-tint: var(--seal-tint);
+  --color-seal-tint-strong: var(--seal-tint-strong);
+  --color-gold: var(--gold);
+  --color-gold-tint: var(--gold-tint);
+  --color-forest: var(--forest);
+  --color-forest-tint: var(--forest-tint);
+  --color-rust: var(--rust);
+  --color-rust-tint: var(--rust-tint);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-public-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  color-scheme: light dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+::selection {
+  background: var(--seal-tint-strong);
+  color: var(--seal-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--seal);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

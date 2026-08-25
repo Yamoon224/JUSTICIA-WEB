@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { ArrowLeft, Combine, ShieldQuestion } from "lucide-react";
 
-import { Badge, Card, ErrorBanner, Field, SubmitButton, TextInput } from "@/components/form";
+import { Badge, Card, ErrorBanner, Field, PageHeader, SubmitButton, TextInput } from "@/components/ui";
 import { actionFusionnerPersonnes } from "@/features/identification/actions";
 import { obtenirPersonne } from "@/lib/api/personnes";
 
@@ -20,15 +21,22 @@ export default async function PersonnePage({
   // journalisé côté API — la page ne le contourne jamais côté client.
   if (!motif) {
     return (
-      <div className="flex max-w-md flex-col gap-4">
-        <h1 className="text-lg font-semibold text-zinc-900">Motif de consultation requis</h1>
-        <p className="text-sm text-zinc-500">
-          Cette consultation sera journalisée avec le motif que vous indiquez (§6.2, §8).
-        </p>
-        <form method="get" className="flex flex-col gap-3">
-          <TextInput name="motif" required placeholder="Ex. vérification d'identité, recoupement d'affaire..." />
-          <SubmitButton>Consulter</SubmitButton>
-        </form>
+      <div className="flex max-w-md flex-col gap-6">
+        <PageHeader eyebrow="§6.2, §8" title="Motif de consultation requis" />
+        <Card>
+          <div className="flex items-start gap-3">
+            <ShieldQuestion size={20} className="mt-0.5 shrink-0 text-gold" />
+            <p className="text-sm text-ink-soft">
+              Cette consultation sera journalisée avec le motif que vous indiquez.
+            </p>
+          </div>
+          <form method="get" className="flex flex-col gap-3">
+            <Field label="Motif" htmlFor="motif">
+              <TextInput name="motif" id="motif" required placeholder="Ex. vérification d'identité, recoupement d'affaire..." />
+            </Field>
+            <SubmitButton>Consulter la fiche</SubmitButton>
+          </form>
+        </Card>
       </div>
     );
   }
@@ -37,43 +45,44 @@ export default async function PersonnePage({
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
-      <div>
-        <h1 className="text-xl font-semibold text-zinc-900">{personne.nom_affichage}</h1>
-        <p className="font-mono text-xs text-zinc-500">{personne.identifiant_unique}</p>
-      </div>
+      <PageHeader
+        eyebrow="§6.2 — Fiche personne"
+        title={personne.nom_affichage}
+        description={personne.identifiant_unique}
+      />
 
       <ErrorBanner message={erreur} />
 
       <Card title="Identité">
-        <dl className="grid grid-cols-2 gap-y-2 text-sm">
-          <dt className="text-zinc-500">Type</dt>
-          <dd><Badge>{personne.type}</Badge></dd>
-          <dt className="text-zinc-500">Date de naissance</dt>
-          <dd>{personne.date_naissance ?? "—"}</dd>
-          <dt className="text-zinc-500">Lieu de naissance</dt>
-          <dd>{personne.lieu_naissance ?? "—"}</dd>
-          <dt className="text-zinc-500">Adresse</dt>
-          <dd>{personne.adresse ?? "—"}</dd>
+        <dl className="grid grid-cols-2 gap-y-3 text-sm">
+          <dt className="text-ink-soft">Type</dt>
+          <dd><Badge tone="seal">{personne.type}</Badge></dd>
+          <dt className="text-ink-soft">Date de naissance</dt>
+          <dd className="text-ink">{personne.date_naissance ?? "—"}</dd>
+          <dt className="text-ink-soft">Lieu de naissance</dt>
+          <dd className="text-ink">{personne.lieu_naissance ?? "—"}</dd>
+          <dt className="text-ink-soft">Adresse</dt>
+          <dd className="text-ink">{personne.adresse ?? "—"}</dd>
         </dl>
       </Card>
 
-      <Card title="Fusionner avec une fiche en doublon (§6.2)">
-        <p className="text-xs text-zinc-500">
-          Le rapprochement n&apos;est jamais automatique : indiquez l&apos;identifiant de la fiche à absorber
-          après vérification.
-        </p>
+      <Card title="Fusionner un doublon" description="Le rapprochement n'est jamais automatique : vérifiez avant d'absorber une fiche.">
         <form action={actionFusionnerPersonnes} className="flex flex-wrap items-end gap-3">
           <input type="hidden" name="personne_id" value={personne.id} />
           <input type="hidden" name="motif" value={motif} />
           <Field label="ID de la fiche à absorber" htmlFor="personne_absorbee_id">
-            <TextInput id="personne_absorbee_id" name="personne_absorbee_id" type="number" required />
+            <TextInput id="personne_absorbee_id" name="personne_absorbee_id" type="number" required className="w-44" />
           </Field>
-          <SubmitButton>Fusionner</SubmitButton>
+          <SubmitButton variant="secondary">
+            <Combine size={16} />
+            Fusionner
+          </SubmitButton>
         </form>
       </Card>
 
-      <Link href="/personnes" className="text-sm text-zinc-500 hover:underline">
-        ← Retour à la recherche
+      <Link href="/personnes" className="inline-flex w-fit items-center gap-1.5 text-sm text-ink-soft hover:text-seal">
+        <ArrowLeft size={15} />
+        Retour à la recherche
       </Link>
     </div>
   );

@@ -1,8 +1,11 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2, LogIn } from "lucide-react";
 import { useState } from "react";
 import type { FormEvent } from "react";
+
+import { ErrorBanner, Field, TextInput } from "@/components/ui";
 
 /**
  * N'autorise que les chemins relatifs internes à l'application pour la
@@ -51,28 +54,22 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-4">
-      <div className="flex flex-col gap-1">
-        <label htmlFor="matricule" className="text-sm font-medium text-zinc-700">
-          Matricule
-        </label>
-        <input
+    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
+      <Field label="Matricule" htmlFor="matricule">
+        <TextInput
           id="matricule"
           name="matricule"
           type="text"
           autoComplete="username"
           required
+          autoFocus
           value={matricule}
           onChange={(event) => setMatricule(event.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
         />
-      </div>
+      </Field>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-medium text-zinc-700">
-          Mot de passe
-        </label>
-        <input
+      <Field label="Mot de passe" htmlFor="password">
+        <TextInput
           id="password"
           name="password"
           type="password"
@@ -80,17 +77,17 @@ export function LoginForm() {
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
         />
-      </div>
+      </Field>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      <ErrorBanner message={error ?? undefined} />
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50"
+        className="mt-1 inline-flex items-center justify-center gap-2 rounded-lg bg-seal px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-seal-strong disabled:cursor-not-allowed disabled:opacity-60"
       >
+        {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <LogIn size={16} />}
         {isSubmitting ? "Connexion..." : "Se connecter"}
       </button>
     </form>
