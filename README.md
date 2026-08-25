@@ -11,7 +11,14 @@ Consomme l'API [JUSTICIA-BACKEND](https://github.com/Yamoon224/JUSTICIA-BACKEND)
 
 ## Pile technique
 
-NextJS 16 (App Router) · TypeScript strict · Tailwind CSS · Zod.
+NextJS 16 (App Router) · TypeScript strict · Tailwind CSS v4 · lucide-react · Zod.
+
+Système de design « registre & sceau » (voir `src/app/globals.css`) : fond
+papier chaud, encre presque noire, accent lie-de-vin (Fraunces en titrage,
+Public Sans en corps de texte, IBM Plex Mono pour les codes/identifiants) —
+un vocabulaire tiré du sujet plutôt qu'une palette SaaS générique. Primitives
+partagées dans `src/components/ui.tsx`, shell applicatif responsive
+(sidebar desktop / tiroir mobile) dans `src/components/app-shell.tsx`.
 
 ## État d'avancement
 
@@ -22,7 +29,10 @@ NextJS 16 (App Router) · TypeScript strict · Tailwind CSS · Zod.
   scellés, transmission parquet), garde à vue (placement, droits,
   prolongation, clôture) — voir
   `src/features/{garde-a-vue,identification,affaires}`.
-- ⏳ Phases 4 à 9 : à venir.
+- ✅ **Phase 4 — Parquet** (§6.5) : bureau des arrivées, affectation à un
+  magistrat, orientation des poursuites, réquisitions — voir
+  `src/features/parquet`.
+- ⏳ Phases 5 à 9 : à venir.
 
 ## Démarrage
 
