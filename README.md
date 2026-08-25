@@ -17,7 +17,10 @@ NextJS 16 (App Router) · TypeScript strict · Tailwind CSS · Zod.
 
 - ✅ **Phase 2 — Socle technique** : authentification (cookie httpOnly via
   BFF), garde de routes, tableau de bord filtré par permissions.
-- 🚧 **Phase 3 — Enquête & garde à vue** (§6.1-6.4) : en cours — voir
+- ✅ **Phase 3 — Enquête & garde à vue** (§6.1-6.4) : personnes (recherche,
+  création, consultation motivée, fusion), affaires (ouverture, PV,
+  scellés, transmission parquet), garde à vue (placement, droits,
+  prolongation, clôture) — voir
   `src/features/{garde-a-vue,identification,affaires}`.
 - ⏳ Phases 4 à 9 : à venir.
 
