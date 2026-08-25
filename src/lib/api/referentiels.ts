@@ -45,3 +45,8 @@ export interface MagistratReferentiel {
 export async function listerMagistrats(): Promise<MagistratReferentiel[]> {
   return backendFetch<MagistratReferentiel[]>("/referentiels/magistrats");
 }
+
+/** Réutilise MagistratReferentiel : même forme (id, matricule, nom, prénom). */
+export async function listerJugesInstruction(): Promise<MagistratReferentiel[]> {
+  return backendFetch<MagistratReferentiel[]>("/referentiels/juges-instruction");
+}

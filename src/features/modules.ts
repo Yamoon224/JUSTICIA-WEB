@@ -78,6 +78,7 @@ export const MODULES: ModuleDescriptor[] = [
     description: "Dossiers d'information, mandats, détention provisoire.",
     icon: "instruction",
     permissions: ["instruction.gerer"],
+    href: "/instruction",
   },
   {
     slug: "audiencement",
