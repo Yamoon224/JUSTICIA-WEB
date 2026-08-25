@@ -29,9 +29,12 @@ partagées dans `src/components/ui.tsx`, shell applicatif responsive
   scellés, transmission parquet), garde à vue (placement, droits,
   prolongation, clôture) — voir
   `src/features/{garde-a-vue,identification,affaires}`.
-- ✅ **Phase 4 — Parquet** (§6.5) : bureau des arrivées, affectation à un
-  magistrat, orientation des poursuites, réquisitions — voir
-  `src/features/parquet`.
+- ✅ **Phase 4 — Parquet & instruction** (§6.5-6.6) :
+  - Parquet : bureau des arrivées, affectation à un magistrat,
+    orientation des poursuites, réquisitions — `src/features/parquet`.
+  - Instruction : cabinet, mise en examen, mesures de sûreté (contrôle
+    judiciaire, détention provisoire), mandats, actes, ordonnance de
+    règlement — `src/features/instruction`.
 - ⏳ Phases 5 à 9 : à venir.
 
 ## Démarrage
