@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowLeft, Combine, ShieldQuestion } from "lucide-react";
+import { ArrowLeft, BookLock, Combine, ShieldQuestion } from "lucide-react";
 
 import { Badge, Card, ErrorBanner, Field, PageHeader, SubmitButton, TextInput } from "@/components/ui";
 import { actionFusionnerPersonnes } from "@/features/identification/actions";
 import { obtenirPersonne } from "@/lib/api/personnes";
+import { getCurrentAgent } from "@/lib/auth/current-agent";
 
 export const metadata = { title: "Fiche personne — JUSTICIA" };
 
@@ -41,7 +42,8 @@ export default async function PersonnePage({
     );
   }
 
-  const personne = await obtenirPersonne(Number(id), motif);
+  const [personne, agent] = await Promise.all([obtenirPersonne(Number(id), motif), getCurrentAgent()]);
+  const peutVoirCasier = agent?.permissions.some((p) => ["casier.gerer", "casier.consulter_nominatif"].includes(p)) ?? false;
 
   return (
     <div className="flex max-w-2xl flex-col gap-6">
@@ -49,6 +51,17 @@ export default async function PersonnePage({
         eyebrow="§6.2 — Fiche personne"
         title={personne.nom_affichage}
         description={personne.identifiant_unique}
+        actions={
+          peutVoirCasier && (
+            <Link
+              href={`/casier/personnes/${personne.id}?nom=${encodeURIComponent(personne.nom_affichage)}`}
+              className="inline-flex items-center gap-1.5 text-sm text-seal hover:underline"
+            >
+              <BookLock size={15} />
+              Voir le casier
+            </Link>
+          )
+        }
       />
 
       <ErrorBanner message={erreur} />

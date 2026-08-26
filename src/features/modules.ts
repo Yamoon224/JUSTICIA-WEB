@@ -102,6 +102,7 @@ export const MODULES: ModuleDescriptor[] = [
     description: "Bulletins B1/B2/B3, réhabilitation, contrôle des accès.",
     icon: "casier",
     permissions: ["casier.gerer", "casier.consulter_nominatif"],
+    href: "/casier",
   },
   {
     slug: "statistiques",
