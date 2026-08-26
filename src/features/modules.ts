@@ -110,6 +110,7 @@ export const MODULES: ModuleDescriptor[] = [
     description: "Tableaux de bord par juridiction, statistiques nationales.",
     icon: "statistiques",
     permissions: ["statistiques.consulter"],
+    href: "/statistiques",
   },
   {
     slug: "administration",

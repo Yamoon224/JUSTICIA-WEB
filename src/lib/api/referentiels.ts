@@ -82,3 +82,15 @@ export interface EtablissementPenitentiaireReferentiel {
 export async function listerEtablissementsPenitentiaires(): Promise<EtablissementPenitentiaireReferentiel[]> {
   return backendFetch<EtablissementPenitentiaireReferentiel[]>("/referentiels/etablissements-penitentiaires");
 }
+
+export interface RessortReferentiel {
+  id: number;
+  code: string;
+  nom: string;
+  type: string;
+  parent_id: number | null;
+}
+
+export async function listerRessorts(): Promise<RessortReferentiel[]> {
+  return backendFetch<RessortReferentiel[]>("/referentiels/ressorts");
+}
