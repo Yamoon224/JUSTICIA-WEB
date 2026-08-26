@@ -31,7 +31,10 @@ export async function backendFetch<T>(
   const { auth = true, headers, ...rest } = init;
   const requestHeaders = new Headers(headers);
   requestHeaders.set("Accept", "application/json");
-  if (rest.body && !requestHeaders.has("Content-Type")) {
+  // Un FormData (versement de pièce, §6.2/6.3/6.4) doit fixer lui-même son
+  // Content-Type (multipart/form-data; boundary=...) — l'imposer ici casserait
+  // le corps de la requête.
+  if (rest.body && !requestHeaders.has("Content-Type") && !(rest.body instanceof FormData)) {
     requestHeaders.set("Content-Type", "application/json");
   }
 

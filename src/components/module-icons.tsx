@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Bell,
   BookLock,
   FileSearch,
   Fingerprint,
@@ -15,6 +16,7 @@ import {
 import type { ModuleIconKey } from "@/features/modules";
 
 export const MODULE_ICONS: Record<ModuleIconKey, LucideIcon> = {
+  alertes: Bell,
   "garde-a-vue": ShieldAlert,
   identification: Fingerprint,
   affaires: FolderOpen,

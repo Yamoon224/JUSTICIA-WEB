@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft, BookLock, Combine, ShieldQuestion } from "lucide-react";
 
+import { FormulaireVersementPiece, ListePiecesVersees } from "@/components/pieces-versees";
 import { Badge, Card, ErrorBanner, Field, PageHeader, SubmitButton, TextInput } from "@/components/ui";
+import { actionVerserDocumentPersonne } from "@/features/documents/actions";
 import { actionFusionnerPersonnes } from "@/features/identification/actions";
 import { obtenirPersonne } from "@/lib/api/personnes";
 import { getCurrentAgent } from "@/lib/auth/current-agent";
@@ -77,6 +79,18 @@ export default async function PersonnePage({
           <dt className="text-ink-soft">Adresse</dt>
           <dd className="text-ink">{personne.adresse ?? "—"}</dd>
         </dl>
+      </Card>
+
+      <Card title="Pièces versées" description="§6.2, §9 — photo, pièces d'identité numérisées ; stockage chiffré.">
+        <ListePiecesVersees documents={personne.documents} />
+        <div className="border-t border-line pt-4">
+          <FormulaireVersementPiece
+            action={actionVerserDocumentPersonne}
+            champsCaches={{ personne_id: personne.id, motif }}
+            categorie="personne"
+            idPrefix="personne"
+          />
+        </div>
       </Card>
 
       <Card title="Fusionner un doublon" description="Le rapprochement n'est jamais automatique : vérifiez avant d'absorber une fiche.">

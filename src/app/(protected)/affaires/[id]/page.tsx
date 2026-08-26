@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, FileSignature, PackageCheck, Send, ShieldPlus, UserRound } from "lucide-react";
+import { ArrowLeft, FileDown, FileSignature, PackageCheck, Send, ShieldPlus, UserRound } from "lucide-react";
 
+import { FormulaireVersementPiece, ListePiecesVersees } from "@/components/pieces-versees";
 import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, PageHeader, Select, SubmitButton, TextArea, TextInput } from "@/components/ui";
 import {
   actionEnregistrerMouvementScelle,
@@ -11,6 +12,7 @@ import {
   actionSignerProcesVerbal,
   actionTransmettreAuParquet,
 } from "@/features/affaires/actions";
+import { actionVerserDocumentAffaire, actionVerserDocumentScelle } from "@/features/documents/actions";
 import { obtenirAffaire } from "@/lib/api/affaires";
 
 export const metadata = { title: "Affaire — JUSTICIA" };
@@ -129,7 +131,18 @@ export default async function AffairePage({
                     <Mono>{pv.cote}</Mono>
                     <span className="text-ink-soft">— {pv.type}</span>
                   </span>
-                  <Badge tone={pv.signe ? "forest" : "gold"}>{pv.signe ? "signé" : "non signé"}</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge tone={pv.signe ? "forest" : "gold"}>{pv.signe ? "signé" : "non signé"}</Badge>
+                    <a
+                      href={`/api/proces-verbaux/${pv.id}/pdf`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-seal hover:underline"
+                    >
+                      <FileDown size={13} />
+                      PDF
+                    </a>
+                  </div>
                 </div>
                 <p className="whitespace-pre-wrap text-sm text-ink-soft">{pv.contenu}</p>
 
@@ -176,6 +189,17 @@ export default async function AffairePage({
         </form>
       </Card>
 
+      <Card title="Pièces versées" description="§6.3, §9 — cotées automatiquement à l'ordre du versement ; stockage chiffré.">
+        <ListePiecesVersees documents={affaire.documents} />
+        <div className="border-t border-line pt-4">
+          <FormulaireVersementPiece
+            action={actionVerserDocumentAffaire}
+            champsCaches={{ affaire_id: affaire.id }}
+            idPrefix="affaire"
+          />
+        </div>
+      </Card>
+
       <Card title="Scellés" description="§6.4 — chaîne de conservation : chaque mouvement est tracé, jamais corrigé.">
         {affaire.scelles?.length ? (
           <ul className="flex flex-col gap-3">
@@ -199,6 +223,13 @@ export default async function AffairePage({
                     ))}
                   </ul>
                 )}
+
+                <ListePiecesVersees documents={scelle.documents} />
+                <FormulaireVersementPiece
+                  action={actionVerserDocumentScelle}
+                  champsCaches={{ scelle_id: scelle.id, affaire_id: affaire.id }}
+                  idPrefix={`scelle-${scelle.id}`}
+                />
 
                 <form action={actionEnregistrerMouvementScelle} className="flex flex-wrap items-end gap-3">
                   <input type="hidden" name="affaire_id" value={affaire.id} />

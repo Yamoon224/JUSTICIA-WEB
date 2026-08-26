@@ -1,3 +1,5 @@
+import type { PieceVersee } from "./document";
+
 /**
  * Reflète App\Http\Resources\PersonneResource côté API Laravel (§6.2).
  */
@@ -15,6 +17,7 @@ export interface Personne {
   raison_sociale: string | null;
   adresse: string | null;
   pieces_identite?: { type: string; numero: string }[];
+  documents?: PieceVersee[];
 }
 
 export interface PersonneListePage {

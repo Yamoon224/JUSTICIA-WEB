@@ -17,7 +17,9 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
     redirect("/login");
   }
 
-  const modules = MODULES.filter((module) => module.permissions.some((permission) => agent.permissions.includes(permission)));
+  const modules = MODULES.filter(
+    (module) => module.permissions.length === 0 || module.permissions.some((permission) => agent.permissions.includes(permission)),
+  );
 
   return (
     <AppShell agent={agent} modules={modules}>

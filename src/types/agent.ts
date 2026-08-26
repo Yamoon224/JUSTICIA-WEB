@@ -9,8 +9,12 @@ export interface Agent {
   nom: string;
   prenom: string;
   nom_complet: string;
-  email: string;
+  email: string | null;
   actif: boolean;
+  suspendu_at?: string | null;
+  valide?: boolean;
+  valide_at?: string | null;
+  cree_par?: number | null;
   roles: string[];
   permissions: string[];
   service?: {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, BookText, History, ScrollText, ShieldQuestion, Stamp } from "lucide-react";
+import { ArrowLeft, BookText, FileDown, History, ScrollText, ShieldQuestion, Stamp } from "lucide-react";
 
 import { Badge, Card, EmptyState, ErrorBanner, Field, Select, SubmitButton, TextInput } from "@/components/ui";
 import { actionAmnistier, actionRehabiliter } from "@/features/casier/actions";
@@ -77,9 +77,20 @@ export default async function CasierPersonnePage({
 
           {bulletin && (
             <div className="flex flex-col gap-3 border-t border-line pt-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-faint">
-                {LIBELLES_TYPE_BULLETIN[bulletin.type]} — généré le {new Date(bulletin.genere_at).toLocaleString("fr-FR", { dateStyle: "long", timeStyle: "short" })}
-              </p>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-faint">
+                  {LIBELLES_TYPE_BULLETIN[bulletin.type]} — généré le {new Date(bulletin.genere_at).toLocaleString("fr-FR", { dateStyle: "long", timeStyle: "short" })}
+                </p>
+                <a
+                  href={`/api/casier/personnes/${personneId}/bulletin-pdf?type=${typeBulletin}&motif=${encodeURIComponent(motif ?? "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-seal hover:underline"
+                >
+                  <FileDown size={13} />
+                  Éditer en PDF
+                </a>
+              </div>
               {bulletin.condamnations.length === 0 ? (
                 <EmptyState message="Aucune mention sur ce bulletin." />
               ) : (

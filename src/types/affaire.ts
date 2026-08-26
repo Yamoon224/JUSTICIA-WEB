@@ -1,3 +1,4 @@
+import type { PieceVersee } from "./document";
 import type { ProcesVerbal } from "./proces-verbal";
 import type { Scelle } from "./scelle";
 
@@ -39,6 +40,7 @@ export interface Affaire {
   personnes?: AffairePersonne[];
   proces_verbaux?: ProcesVerbal[];
   scelles?: Scelle[];
+  documents?: PieceVersee[];
 }
 
 export interface AffaireListePage {

@@ -11,6 +11,7 @@
  * bien depuis un Server Component que depuis un Client Component.
  */
 export type ModuleIconKey =
+  | "alertes"
   | "garde-a-vue"
   | "identification"
   | "affaires"
@@ -27,7 +28,12 @@ export interface ModuleDescriptor {
   label: string;
   description: string;
   icon: ModuleIconKey;
-  /** Une seule de ces permissions suffit à rendre le module visible. */
+  /**
+   * Une seule de ces permissions suffit à rendre le module visible ;
+   * un tableau vide le rend visible à tout agent authentifié — réservé aux
+   * vues strictement personnelles (§6.11 : agenda de l'agent), jamais à une
+   * vue portant une donnée sensible ou cloisonnée.
+   */
   permissions: string[];
   /**
    * Absent tant que le module n'a pas de page de destination propre (§10.2)
@@ -40,6 +46,14 @@ export interface ModuleDescriptor {
 }
 
 export const MODULES: ModuleDescriptor[] = [
+  {
+    slug: "alertes",
+    label: "Mes alertes",
+    description: "Échéances de garde à vue et de détention provisoire qui vous concernent.",
+    icon: "alertes",
+    permissions: [],
+    href: "/alertes",
+  },
   {
     slug: "garde-a-vue",
     label: "Garde à vue",
@@ -115,8 +129,9 @@ export const MODULES: ModuleDescriptor[] = [
   {
     slug: "administration",
     label: "Administration",
-    description: "Référentiels, paramétrage des délais, habilitations.",
+    description: "Comptes agents, habilitations, référentiel des infractions.",
     icon: "administration",
     permissions: ["administration.gerer", "habilitations.gerer"],
+    href: "/administration",
   },
 ];

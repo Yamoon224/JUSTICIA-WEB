@@ -25,6 +25,17 @@ export async function listerUnites(): Promise<UniteReferentiel[]> {
   return backendFetch<UniteReferentiel[]>("/referentiels/unites");
 }
 
+export interface ServiceReferentiel {
+  id: number;
+  code: string;
+  nom: string;
+  type: string;
+}
+
+export async function listerServices(): Promise<ServiceReferentiel[]> {
+  return backendFetch<ServiceReferentiel[]>("/referentiels/services");
+}
+
 export interface MotifClassementReferentiel {
   id: number;
   code: string;
