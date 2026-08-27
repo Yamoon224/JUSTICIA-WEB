@@ -42,8 +42,17 @@
   --shadow-card: 0 1px 2px rgb(15 23 18 / 0.05), 0 8px 24px -12px rgb(15 23 18 / 0.12);
 }
 
+/*
+ * Bascule manuelle de thème (voir theme-toggle.tsx) : `data-theme` sur <html>
+ * prime sur la préférence système. Sans attribut, le thème suit
+ * `prefers-color-scheme` comme avant. Le bloc media est donc gardé par
+ * `:not([data-theme="light"])` pour qu'un choix explicite « clair » résiste
+ * à un système en mode sombre, et le bloc `[data-theme="dark"]` ci-dessous
+ * répète les mêmes valeurs hors media query pour qu'un choix explicite
+ * « sombre » s'applique même sur un système en mode clair.
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #0f1512;
     --paper-raised: #161f1a;
     --paper-sunken: #0a0e0c;
@@ -69,6 +78,33 @@
 
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
   }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0f1512;
+  --paper-raised: #161f1a;
+  --paper-sunken: #0a0e0c;
+  --ink: #eef4f0;
+  --ink-soft: #a9b6ae;
+  --ink-faint: #6d7972;
+  --line: #263029;
+  --line-strong: #34403a;
+
+  --seal: #4ade80;
+  --seal-strong: #86efac;
+  --seal-tint: #123322;
+  --seal-tint-strong: #1a4a30;
+
+  --gold: #e3b158;
+  --gold-tint: #3a2d14;
+
+  --forest: #2dd4bf;
+  --forest-tint: #10302d;
+
+  --rust: #f87171;
+  --rust-tint: #3a1a16;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
 }
 
 @theme inline {
