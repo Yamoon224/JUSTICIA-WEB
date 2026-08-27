@@ -22,6 +22,16 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse> {
   const { id } = await params;
+  // Un [id] Next.js matche sur le chemin encore encodé : un `%2F` dans la
+  // requête devient un `/` littéral une fois décodé dans `id`, ce qui
+  // permettrait à `../../administration/agents` de faire sortir la requête
+  // sortante de `/api/v1/documents/{id}` — vers n'importe quel chemin du
+  // backend, avec le jeton Sanctum du BFF que le navigateur ne détient
+  // jamais autrement. Un identifiant numérique est la seule forme valide ici.
+  if (!/^\d+$/.test(id)) {
+    return NextResponse.json({ message: "Identifiant invalide." }, { status: 400 });
+  }
+
   const token = await getSessionToken();
 
   if (!token) {

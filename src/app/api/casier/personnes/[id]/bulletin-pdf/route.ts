@@ -14,6 +14,13 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ): Promise<NextResponse> {
   const { id } = await params;
+  // Cf. /api/documents/[id] : un `%2F` encodé dans la requête survit décodé
+  // en `/` littéral dans `id`, ce qui permettrait de faire sortir la requête
+  // sortante (avec le jeton Sanctum du BFF) de `/api/v1/casier/personnes/{id}`.
+  if (!/^\d+$/.test(id)) {
+    return NextResponse.json({ message: "Identifiant invalide." }, { status: 400 });
+  }
+
   const token = await getSessionToken();
 
   if (!token) {
