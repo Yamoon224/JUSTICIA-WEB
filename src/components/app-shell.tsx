@@ -2,55 +2,103 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { LogoutButton } from "@/components/logout-button";
 import { MODULE_ICONS } from "@/components/module-icons";
 import { SealMark } from "@/components/seal-mark";
-import type { ModuleDescriptor } from "@/features/modules";
+import { LIBELLES_GROUPE, type ModuleDescriptor, type ModuleGroupKey } from "@/features/modules";
 import type { Agent } from "@/types/agent";
+
+const ORDRE_GROUPES: ModuleGroupKey[] = ["personnel", "chaine-penale", "pilotage"];
 
 function estActif(pathname: string, href?: string): boolean {
   if (!href) return false;
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
 }
 
+function grouper(modules: ModuleDescriptor[]): { groupe: ModuleGroupKey; modules: ModuleDescriptor[] }[] {
+  return ORDRE_GROUPES.map((groupe) => ({ groupe, modules: modules.filter((m) => m.group === groupe) })).filter(
+    (section) => section.modules.length > 0,
+  );
+}
+
 function NavLinks({ modules, pathname, onNavigate }: { modules: ModuleDescriptor[]; pathname: string; onNavigate?: () => void }) {
   return (
-    <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-2">
-      {modules.map((module) => {
-        const Icon = MODULE_ICONS[module.icon];
-        const actif = estActif(pathname, module.href);
+    <nav className="flex flex-1 flex-col gap-4 overflow-y-auto px-3 py-4">
+      {grouper(modules).map(({ groupe, modules: modulesDuGroupe }) => (
+        <div key={groupe} className="flex flex-col gap-0.5">
+          <span className="px-3 pb-1 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-ink-faint">
+            {LIBELLES_GROUPE[groupe]}
+          </span>
+          {modulesDuGroupe.map((module) => {
+            const Icon = MODULE_ICONS[module.icon];
+            const actif = estActif(pathname, module.href);
 
-        if (!module.href) {
-          return (
-            <span
-              key={module.slug}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-ink-faint"
-              title={module.navHint ?? "Interface à venir"}
-            >
-              <Icon size={17} strokeWidth={1.75} />
-              {module.label}
-            </span>
-          );
-        }
+            if (!module.href) {
+              return (
+                <span
+                  key={module.slug}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-ink-faint"
+                  title={module.navHint ?? "Interface à venir"}
+                >
+                  <Icon size={17} strokeWidth={1.75} />
+                  {module.label}
+                </span>
+              );
+            }
 
-        return (
-          <Link
-            key={module.slug}
-            href={module.href}
-            onClick={onNavigate}
-            className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              actif ? "bg-seal-tint text-seal-strong" : "text-ink-soft hover:bg-paper-sunken hover:text-ink"
-            }`}
-          >
-            <Icon size={17} strokeWidth={1.75} className={actif ? "text-seal" : "text-ink-faint group-hover:text-ink-soft"} />
-            {module.label}
-          </Link>
-        );
-      })}
+            return (
+              <Link
+                key={module.slug}
+                href={module.href}
+                onClick={onNavigate}
+                className={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  actif ? "bg-seal-tint text-seal-strong" : "text-ink-soft hover:bg-paper-sunken hover:text-ink"
+                }`}
+              >
+                <Icon size={17} strokeWidth={1.75} className={actif ? "text-seal" : "text-ink-faint group-hover:text-ink-soft"} />
+                {module.label}
+              </Link>
+            );
+          })}
+        </div>
+      ))}
     </nav>
+  );
+}
+
+function TopBar({ onOpenMenu, alertesNonLues }: { onOpenMenu: () => void; alertesNonLues: number }) {
+  return (
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-line bg-paper-raised/85 px-4 backdrop-blur-sm sm:px-6 lg:px-10">
+      <button
+        aria-label="Ouvrir le menu"
+        onClick={onOpenMenu}
+        className="rounded-md p-1.5 text-ink-soft hover:bg-paper-sunken lg:hidden"
+      >
+        <Menu size={20} />
+      </button>
+      <Link href="/" className="flex items-center gap-2 lg:hidden">
+        <SealMark className="h-5 w-5 text-seal" />
+        <span className="font-display text-base font-medium text-ink">JUSTICIA</span>
+      </Link>
+
+      <div className="flex-1" />
+
+      <Link
+        href="/alertes"
+        aria-label={alertesNonLues > 0 ? `Alertes — ${alertesNonLues} non lue(s)` : "Alertes"}
+        className="relative flex h-9 w-9 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-paper-sunken hover:text-ink"
+      >
+        <Bell size={18} strokeWidth={1.75} />
+        {alertesNonLues > 0 && (
+          <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-seal px-1 text-[0.65rem] font-semibold leading-none text-white">
+            {alertesNonLues > 9 ? "9+" : alertesNonLues}
+          </span>
+        )}
+      </Link>
+    </header>
   );
 }
 
@@ -72,10 +120,12 @@ function AgentCard({ agent }: { agent: Agent }) {
 export function AppShell({
   agent,
   modules,
+  alertesNonLues,
   children,
 }: {
   agent: Agent;
   modules: ModuleDescriptor[];
+  alertesNonLues: number;
   children: ReactNode;
 }) {
   const pathname = usePathname();
@@ -128,20 +178,7 @@ export function AppShell({
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-line bg-paper-raised px-4 py-3 lg:hidden">
-          <button
-            aria-label="Ouvrir le menu"
-            onClick={() => setDrawerOuvert(true)}
-            className="rounded-md p-1.5 text-ink-soft hover:bg-paper-sunken"
-          >
-            <Menu size={20} />
-          </button>
-          <Link href="/" className="flex items-center gap-2">
-            <SealMark className="h-5 w-5 text-seal" />
-            <span className="font-display text-base font-medium text-ink">JUSTICIA</span>
-          </Link>
-          <div className="w-8" />
-        </header>
+        <TopBar onOpenMenu={() => setDrawerOuvert(true)} alertesNonLues={alertesNonLues} />
 
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">{children}</div>

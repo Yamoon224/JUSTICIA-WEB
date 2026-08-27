@@ -23,11 +23,21 @@ export type ModuleIconKey =
   | "statistiques"
   | "administration";
 
+export type ModuleGroupKey = "personnel" | "chaine-penale" | "pilotage";
+
+export const LIBELLES_GROUPE: Record<ModuleGroupKey, string> = {
+  personnel: "Personnel",
+  "chaine-penale": "Chaîne pénale",
+  pilotage: "Pilotage",
+};
+
 export interface ModuleDescriptor {
   slug: string;
   label: string;
   description: string;
   icon: ModuleIconKey;
+  /** Regroupe la navigation par nature — reflète les trois familles réelles du §5 (agenda propre à l'agent, les dix étapes de la chaîne pénale, le pilotage transverse), pas un découpage arbitraire. */
+  group: ModuleGroupKey;
   /**
    * Une seule de ces permissions suffit à rendre le module visible ;
    * un tableau vide le rend visible à tout agent authentifié — réservé aux
@@ -51,6 +61,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Mes alertes",
     description: "Échéances de garde à vue et de détention provisoire qui vous concernent.",
     icon: "alertes",
+    group: "personnel",
     permissions: [],
     href: "/alertes",
   },
@@ -59,6 +70,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Garde à vue",
     description: "Registre de garde à vue, délais légaux, actes durant la mesure.",
     icon: "garde-a-vue",
+    group: "chaine-penale",
     permissions: ["gav.gerer"],
     navHint: "Se pilote depuis la fiche d'une affaire",
   },
@@ -67,6 +79,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Personnes",
     description: "Fichier central des personnes mises en cause, statuts par affaire.",
     icon: "identification",
+    group: "chaine-penale",
     permissions: ["personnes.gerer", "personnes.consulter"],
     href: "/personnes",
   },
@@ -75,6 +88,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Affaires",
     description: "Dossiers d'affaire, procès-verbaux, pièces et scellés.",
     icon: "affaires",
+    group: "chaine-penale",
     permissions: ["affaires.gerer", "affaires.consulter"],
     href: "/affaires",
   },
@@ -83,6 +97,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Parquet",
     description: "Orientation des poursuites, déferrements, réquisitions.",
     icon: "parquet",
+    group: "chaine-penale",
     permissions: ["parquet.gerer"],
     href: "/parquet",
   },
@@ -91,6 +106,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Instruction",
     description: "Dossiers d'information, mandats, détention provisoire.",
     icon: "instruction",
+    group: "chaine-penale",
     permissions: ["instruction.gerer"],
     href: "/instruction",
   },
@@ -99,6 +115,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Audiencement",
     description: "Rôle d'audience, décisions, minutes, voies de recours.",
     icon: "audiencement",
+    group: "chaine-penale",
     permissions: ["audiencement.gerer"],
     href: "/audiencement",
   },
@@ -107,6 +124,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Exécution des peines",
     description: "Registre d'écrou, situations pénales, aménagements de peine.",
     icon: "execution",
+    group: "chaine-penale",
     permissions: ["execution.gerer"],
     href: "/execution",
   },
@@ -115,6 +133,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Casier judiciaire",
     description: "Bulletins B1/B2/B3, réhabilitation, contrôle des accès.",
     icon: "casier",
+    group: "chaine-penale",
     permissions: ["casier.gerer", "casier.consulter_nominatif"],
     href: "/casier",
   },
@@ -123,6 +142,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Statistiques",
     description: "Tableaux de bord par juridiction, statistiques nationales.",
     icon: "statistiques",
+    group: "pilotage",
     permissions: ["statistiques.consulter"],
     href: "/statistiques",
   },
@@ -131,6 +151,7 @@ export const MODULES: ModuleDescriptor[] = [
     label: "Administration",
     description: "Comptes agents, habilitations, référentiel des infractions.",
     icon: "administration",
+    group: "pilotage",
     permissions: ["administration.gerer", "habilitations.gerer"],
     href: "/administration",
   },

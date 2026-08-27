@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { MODULES } from "@/features/modules";
+import { listerAlertes } from "@/lib/api/alertes";
 import { getCurrentAgent } from "@/lib/auth/current-agent";
 
 /**
@@ -21,8 +22,14 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
     (module) => module.permissions.length === 0 || module.permissions.some((permission) => agent.permissions.includes(permission)),
   );
 
+  // Best-effort : une alerte non journalisée ne doit jamais empêcher l'accès
+  // au reste de l'application.
+  const alertesNonLues = await listerAlertes(true)
+    .then((page) => page.meta.total)
+    .catch(() => 0);
+
   return (
-    <AppShell agent={agent} modules={modules}>
+    <AppShell agent={agent} modules={modules} alertesNonLues={alertesNonLues}>
       {children}
     </AppShell>
   );
