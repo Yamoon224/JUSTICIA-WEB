@@ -1,66 +1,73 @@
 @import "tailwindcss";
 
 /*
- * Système JUSTICIA — « registre & sceau ».
- * Fond papier chaud, encre presque noire, accent lie-de-vin (le sceau
- * officiel) et or bruni pour les états d'attente — vocabulaire directement
- * tiré du sujet (dossiers, scellés, signatures) plutôt qu'une palette SaaS
- * générique. Le liseré de 3px en couleur de sceau marque tout enregistrement
- * officiel (une affaire, un PV, un scellé, une mesure) — voir chaque module.
+ * Système JUSTICIA — palette blanc/vert.
+ * Fond blanc dominant, vert en couleur de marque (accent, liens, liseré des
+ * enregistrements officiels), ambre pour les états d'attente, rouge pour les
+ * alertes/erreurs. Le succès/l'état définitif (--forest) est volontairement
+ * une teinte sarcelle distincte du vert de marque (--seal) : les deux
+ * apparaissent parfois côte à côte (ex. badges d'une même fiche) et doivent
+ * rester différenciables au premier coup d'œil, pas juste par leur libellé.
+ *
+ * Les noms de variables (paper/seal/gold/forest/rust) sont conservés tels
+ * quels malgré le changement de palette : toute l'interface les référence
+ * déjà par leur rôle sémantique, jamais par leur teinte — les faire évoluer
+ * ici suffit à recolorer l'application entière sans toucher un seul
+ * composant.
  */
 :root {
-  --paper: #faf8f4;
+  --paper: #fafbfa;
   --paper-raised: #ffffff;
-  --paper-sunken: #f2efe8;
-  --ink: #211e1b;
-  --ink-soft: #6b6459;
-  --ink-faint: #a39c8d;
-  --line: #e4dfd5;
-  --line-strong: #cfc7b8;
+  --paper-sunken: #f0f3f1;
+  --ink: #171a18;
+  --ink-soft: #5b625d;
+  --ink-faint: #93998f;
+  --line: #e2e8e3;
+  --line-strong: #c7d0c9;
 
-  --seal: #7a2331;
-  --seal-strong: #5c1a24;
-  --seal-tint: #f3e3e1;
-  --seal-tint-strong: #e9cdc9;
+  --seal: #157347;
+  --seal-strong: #0e5934;
+  --seal-tint: #e6f4ec;
+  --seal-tint-strong: #c7e6d3;
 
-  --gold: #8f6a1c;
-  --gold-tint: #f3e9d6;
+  --gold: #92660f;
+  --gold-tint: #f6ecd8;
 
-  --forest: #2f5a44;
-  --forest-tint: #e4eee7;
+  --forest: #0f766e;
+  --forest-tint: #e1f2f1;
 
-  --rust: #ad4025;
-  --rust-tint: #f7e3dc;
+  --rust: #b3261e;
+  --rust-tint: #fbe9e5;
 
-  --shadow-card: 0 1px 2px rgb(33 30 27 / 0.04), 0 8px 24px -12px rgb(33 30 27 / 0.12);
+  --shadow-card: 0 1px 2px rgb(15 23 18 / 0.05), 0 8px 24px -12px rgb(15 23 18 / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #181613;
-    --paper-raised: #211e1a;
-    --paper-sunken: #14120f;
-    --ink: #f1ece2;
-    --ink-soft: #b0a696;
-    --ink-faint: #746c5d;
-    --line: #322d25;
-    --line-strong: #443d31;
+    --paper: #0f1512;
+    --paper-raised: #161f1a;
+    --paper-sunken: #0a0e0c;
+    --ink: #eef4f0;
+    --ink-soft: #a9b6ae;
+    --ink-faint: #6d7972;
+    --line: #263029;
+    --line-strong: #34403a;
 
-    --seal: #e08e93;
-    --seal-strong: #eda8ac;
-    --seal-tint: #3a2224;
-    --seal-tint-strong: #4a2b2e;
+    --seal: #4ade80;
+    --seal-strong: #86efac;
+    --seal-tint: #123322;
+    --seal-tint-strong: #1a4a30;
 
-    --gold: #d3ab5c;
-    --gold-tint: #362b16;
+    --gold: #e3b158;
+    --gold-tint: #3a2d14;
 
-    --forest: #7fb89b;
-    --forest-tint: #1c2c23;
+    --forest: #2dd4bf;
+    --forest-tint: #10302d;
 
-    --rust: #e08363;
-    --rust-tint: #3a2318;
+    --rust: #f87171;
+    --rust-tint: #3a1a16;
 
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
   }
 }
 
