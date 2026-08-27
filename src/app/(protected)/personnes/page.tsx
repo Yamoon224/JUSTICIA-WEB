@@ -17,7 +17,7 @@ export default async function PersonnesPage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.2 — Identification"
+        eyebrow="Identification"
         title="Personnes"
         description="Fichier central des personnes mises en cause, tous ressorts confondus."
         actions={

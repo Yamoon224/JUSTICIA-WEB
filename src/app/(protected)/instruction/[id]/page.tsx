@@ -43,7 +43,7 @@ export default async function DossierInstructionPage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <div className="flex flex-col gap-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">§6.6 — Instruction</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">Instruction</span>
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">
             <Mono>{affaire.numero_affaire}</Mono>
@@ -64,7 +64,7 @@ export default async function DossierInstructionPage({
         <div className="flex items-center gap-3 rounded-2xl border border-rust/30 bg-rust-tint px-5 py-4 text-rust">
           <ShieldAlert size={20} className="shrink-0" />
           <p className="text-sm font-medium">
-            Détention provisoire à échéance dépassée — signalement prioritaire requis (§6.6, §6.11).
+            Détention provisoire à échéance dépassée — signalement prioritaire requis.
           </p>
         </div>
       )}
@@ -107,7 +107,7 @@ export default async function DossierInstructionPage({
         </Card>
       )}
 
-      <Card title="Personnes & statuts" description="§6.2 — un statut par affaire, jamais figé sur la fiche personne.">
+      <Card title="Personnes & statuts" description="Un statut par affaire, jamais figé sur la fiche personne.">
         {affaire.personnes?.length ? (
           <ul className="flex flex-col divide-y divide-line">
             {affaire.personnes.map((personne) => (
@@ -149,7 +149,7 @@ export default async function DossierInstructionPage({
         )}
       </Card>
 
-      <Card title="Mesures de sûreté" description="§6.6 — contrôle judiciaire ou détention provisoire, jamais renouvelées automatiquement.">
+      <Card title="Mesures de sûreté" description="Contrôle judiciaire ou détention provisoire, jamais renouvelées automatiquement.">
         {dossier.mesures_surete?.length ? (
           <ul className="flex flex-col gap-3">
             {dossier.mesures_surete.map((mesure) => (
@@ -181,7 +181,7 @@ export default async function DossierInstructionPage({
                         <input type="hidden" name="dossier_id" value={dossier.id} />
                         <input type="hidden" name="mesure_id" value={mesure.id} />
                         <Field label="Renouveler de (jours)" htmlFor={`jours-${mesure.id}`}>
-                          <TextInput id={`jours-${mesure.id}`} name="jours" type="number" min={1} max={365} required className="w-28" />
+                          <TextInput id={`jours-${mesure.id}`} name="jours" type="number" min={1} max={365} required placeholder="Ex. 30" className="w-28" />
                         </Field>
                         <SubmitButton variant="secondary">
                           <FileClock size={15} />
@@ -222,7 +222,7 @@ export default async function DossierInstructionPage({
                 </Select>
               </Field>
               <Field label="Obligations" htmlFor="obligations">
-                <TextArea id="obligations" name="obligations" rows={2} required />
+                <TextArea id="obligations" name="obligations" rows={2} required placeholder="Ex. Pointage hebdomadaire au commissariat." />
               </Field>
               <SubmitButton variant="secondary">Placer sous contrôle</SubmitButton>
             </form>
@@ -248,7 +248,7 @@ export default async function DossierInstructionPage({
         )}
       </Card>
 
-      <Card title="Mandats" description="§6.6 — comparution, amener, dépôt, arrêt.">
+      <Card title="Mandats" description="Comparution, amener, dépôt, arrêt.">
         {dossier.mandats?.length ? (
           <ul className="flex flex-col gap-3">
             {dossier.mandats.map((mandat) => (
@@ -361,7 +361,7 @@ export default async function DossierInstructionPage({
               </Field>
             </div>
             <Field label="Description" htmlFor="description-acte">
-              <TextArea id="description-acte" name="description" rows={2} />
+              <TextArea id="description-acte" name="description" rows={2} placeholder="Ex. Expertise psychiatrique du mis en examen." />
             </Field>
             <SubmitButton variant="secondary">Enregistrer l&apos;acte</SubmitButton>
           </form>
@@ -369,7 +369,7 @@ export default async function DossierInstructionPage({
       </Card>
 
       {enCours && dossier.juge_instruction_id && (
-        <Card title="Ordonnance de règlement" description="Seule décision qui clôture le dossier — jamais automatique (§3).">
+        <Card title="Ordonnance de règlement" description="Seule décision qui clôture le dossier — jamais automatique.">
           <form action={actionRendreOrdonnance} className="flex flex-wrap items-end gap-3">
             <input type="hidden" name="dossier_id" value={dossier.id} />
             <Field label="Ordonnance" htmlFor="ordonnance">

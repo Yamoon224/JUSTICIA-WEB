@@ -33,7 +33,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-xs text-ink-faint">
-          Toute connexion est journalisée et horodatée (§8 du cahier des charges).
+          Toute connexion est journalisée et horodatée.
         </p>
       </div>
     </div>

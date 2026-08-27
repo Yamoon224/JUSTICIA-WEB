@@ -30,7 +30,7 @@ export default async function AudiencementPage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.7-6.8 — Audiencement"
+        eyebrow="Audiencement"
         title="Audiencement"
         description="Enrôlement, tenue d'audience, décisions et voies de recours."
       />

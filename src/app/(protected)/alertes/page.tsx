@@ -32,7 +32,7 @@ export default async function AlertesPage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <PageHeader
-        eyebrow="§6.1, §6.11 — Agenda personnel"
+        eyebrow="Agenda personnel"
         title="Mes alertes"
         description="Échéances de garde à vue et de détention provisoire qui vous concernent."
         actions={

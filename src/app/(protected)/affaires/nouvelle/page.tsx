@@ -16,14 +16,14 @@ export default async function NouvelleAffairePage({
 
   return (
     <div className="flex max-w-xl flex-col gap-6">
-      <PageHeader eyebrow="§6.3" title="Ouvrir une affaire" description="Numéro unique attribué automatiquement dans votre ressort." />
+      <PageHeader title="Ouvrir une affaire" description="Numéro unique attribué automatiquement dans votre ressort." />
 
       <ErrorBanner message={erreur} />
 
       <Card>
         <form action={actionOuvrirAffaire} className="flex flex-col gap-4">
           <Field label="Description" htmlFor="description">
-            <TextArea id="description" name="description" rows={3} />
+            <TextArea id="description" name="description" rows={3} placeholder="Ex. Vol avec effraction au préjudice de M. Kouassi." />
           </Field>
 
           <Field label="Date d'ouverture" htmlFor="date_ouverture">

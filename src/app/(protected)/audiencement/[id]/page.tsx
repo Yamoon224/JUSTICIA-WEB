@@ -52,7 +52,7 @@ export default async function DossierAudiencementPage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <div className="flex flex-col gap-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">§6.7 — Audiencement</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">Audiencement</span>
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">
             <Mono>{affaire.numero_affaire}</Mono>
@@ -163,7 +163,7 @@ export default async function DossierAudiencementPage({
                 <TextInput id="nouvelle_date" name="nouvelle_date" type="datetime-local" required />
               </Field>
               <Field label="Motif" htmlFor="motif">
-                <TextInput id="motif" name="motif" required />
+                <TextInput id="motif" name="motif" required placeholder="Ex. Absence du prévenu" />
               </Field>
               <SubmitButton variant="secondary">Renvoyer</SubmitButton>
             </form>
@@ -171,7 +171,7 @@ export default async function DossierAudiencementPage({
         </Card>
       )}
 
-      <Card title="Décisions" description="§6.7 — par prévenu ; met immédiatement à jour son statut sur l'affaire.">
+      <Card title="Décisions" description="Par prévenu ; met immédiatement à jour son statut sur l'affaire.">
         {dossier.decisions?.length ? (
           <ul className="flex flex-col gap-3">
             {dossier.decisions.map((decision) => {
@@ -329,7 +329,7 @@ export default async function DossierAudiencementPage({
               Avec sursis
             </label>
             <Field label="Intérêts civils" htmlFor="interets_civils" hint="le cas échéant">
-              <TextInput id="interets_civils" name="interets_civils" />
+              <TextInput id="interets_civils" name="interets_civils" placeholder="Ex. 500 000 FCFA à la partie civile" />
             </Field>
             <SubmitButton>
               <Gavel size={16} />

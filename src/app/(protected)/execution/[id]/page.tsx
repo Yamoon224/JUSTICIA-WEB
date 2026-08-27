@@ -59,7 +59,7 @@ export default async function DossierExecutionPage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <div className="flex flex-col gap-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">§6.9 — Exécution des peines</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">Exécution des peines</span>
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">
             <Mono>{affaire?.numero_affaire ?? `Dossier #${dossier.id}`}</Mono>
@@ -163,7 +163,7 @@ export default async function DossierExecutionPage({
                   <input type="hidden" name="dossier_id" value={dossier.id} />
                   <input type="hidden" name="ecrou_id" value={ecrou.id} />
                   <Field label="Remise de peine (jours)" htmlFor="jours">
-                    <TextInput id="jours" name="jours" type="number" min={1} required className="w-32" />
+                    <TextInput id="jours" name="jours" type="number" min={1} required placeholder="Ex. 10" className="w-32" />
                   </Field>
                   <Field label="Motif" htmlFor="motif-remise">
                     <Select id="motif-remise" name="motif" required defaultValue="">
@@ -195,7 +195,7 @@ export default async function DossierExecutionPage({
                     </Select>
                   </Field>
                   <Field label="Motif" htmlFor="motif-transfert" hint="facultatif">
-                    <TextInput id="motif-transfert" name="motif" />
+                    <TextInput id="motif-transfert" name="motif" placeholder="Ex. Surpopulation carcérale" />
                   </Field>
                   <SubmitButton variant="secondary">
                     <ArrowRightLeft size={15} />
@@ -257,7 +257,7 @@ export default async function DossierExecutionPage({
                 </Select>
               </Field>
               <Field label="Durée (jours)" htmlFor="duree_jours">
-                <TextInput id="duree_jours" name="duree_jours" type="number" min={1} required />
+                <TextInput id="duree_jours" name="duree_jours" type="number" min={1} required placeholder="Ex. 180" />
               </Field>
             </div>
             <Field
@@ -265,7 +265,7 @@ export default async function DossierExecutionPage({
               htmlFor="detention_provisoire_imputee_jours"
               hint="le cas échéant"
             >
-              <TextInput id="detention_provisoire_imputee_jours" name="detention_provisoire_imputee_jours" type="number" min={0} />
+              <TextInput id="detention_provisoire_imputee_jours" name="detention_provisoire_imputee_jours" type="number" min={0} placeholder="Ex. 30" />
             </Field>
             <SubmitButton>
               <Lock size={16} />
@@ -302,7 +302,7 @@ export default async function DossierExecutionPage({
           <form action={actionTransmettreAmende} className="flex flex-wrap items-end gap-3">
             <input type="hidden" name="dossier_id" value={dossier.id} />
             <Field label="Montant (FCFA)" htmlFor="montant">
-              <TextInput id="montant" name="montant" type="number" min={1} required />
+              <TextInput id="montant" name="montant" type="number" min={1} required placeholder="Ex. 50000" />
             </Field>
             <SubmitButton variant="secondary">
               <Banknote size={16} />
@@ -338,7 +338,7 @@ export default async function DossierExecutionPage({
                 <input type="hidden" name="dossier_id" value={dossier.id} />
                 <input type="hidden" name="tig_id" value={dossier.tig.id} />
                 <Field label="Heures effectuées" htmlFor="heures">
-                  <TextInput id="heures" name="heures" type="number" min={1} required className="w-32" />
+                  <TextInput id="heures" name="heures" type="number" min={1} required placeholder="Ex. 8" className="w-32" />
                 </Field>
                 <SubmitButton variant="secondary">Enregistrer</SubmitButton>
               </form>
@@ -349,7 +349,7 @@ export default async function DossierExecutionPage({
             <input type="hidden" name="dossier_id" value={dossier.id} />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Heures requises" htmlFor="heures_requises">
-                <TextInput id="heures_requises" name="heures_requises" type="number" min={1} required />
+                <TextInput id="heures_requises" name="heures_requises" type="number" min={1} required placeholder="Ex. 40" />
               </Field>
               <Field label="Affectation" htmlFor="affecte_a" hint="facultatif">
                 <TextInput id="affecte_a" name="affecte_a" placeholder="Mairie, association..." />

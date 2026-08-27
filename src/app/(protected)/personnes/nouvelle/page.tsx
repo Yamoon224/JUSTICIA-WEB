@@ -14,7 +14,7 @@ export default async function NouvellePersonnePage({
 
   return (
     <div className="flex max-w-xl flex-col gap-6">
-      <PageHeader eyebrow="§6.2" title="Nouvelle fiche personne" description="L'identifiant unique est attribué automatiquement." />
+      <PageHeader title="Nouvelle fiche personne" description="L'identifiant unique est attribué automatiquement." />
 
       <ErrorBanner message={erreur} />
 
@@ -29,10 +29,10 @@ export default async function NouvellePersonnePage({
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Nom" htmlFor="nom">
-              <TextInput id="nom" name="nom" />
+              <TextInput id="nom" name="nom" placeholder="Ex. Kouassi" />
             </Field>
             <Field label="Prénom" htmlFor="prenom">
-              <TextInput id="prenom" name="prenom" />
+              <TextInput id="prenom" name="prenom" placeholder="Ex. Awa" />
             </Field>
           </div>
 
@@ -41,16 +41,16 @@ export default async function NouvellePersonnePage({
               <TextInput id="date_naissance" name="date_naissance" type="date" />
             </Field>
             <Field label="Lieu de naissance" htmlFor="lieu_naissance">
-              <TextInput id="lieu_naissance" name="lieu_naissance" />
+              <TextInput id="lieu_naissance" name="lieu_naissance" placeholder="Ex. Abidjan" />
             </Field>
           </div>
 
           <Field label="Raison sociale (si personne morale)" htmlFor="raison_sociale">
-            <TextInput id="raison_sociale" name="raison_sociale" />
+            <TextInput id="raison_sociale" name="raison_sociale" placeholder="Ex. SOTRA-CI SARL" />
           </Field>
 
           <Field label="Adresse" htmlFor="adresse">
-            <TextInput id="adresse" name="adresse" />
+            <TextInput id="adresse" name="adresse" placeholder="Ex. Cocody, Abidjan" />
           </Field>
 
           <SubmitButton>

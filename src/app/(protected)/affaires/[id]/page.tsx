@@ -48,7 +48,7 @@ export default async function AffairePage({
   return (
     <div className="flex max-w-3xl flex-col gap-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <PageHeader eyebrow="§6.3 — Dossier" title={affaire.numero_affaire} />
+        <PageHeader eyebrow="Dossier" title={affaire.numero_affaire} />
         <div className="flex items-center gap-2">
           <Badge tone="neutral">{affaire.statut.replaceAll("_", " ")}</Badge>
           {affaire.statut === "ouverte" && (
@@ -76,7 +76,7 @@ export default async function AffairePage({
         </div>
       </Card>
 
-      <Card title="Personnes rattachées" description="§6.2 — un statut par affaire, jamais figé sur la fiche personne.">
+      <Card title="Personnes rattachées" description="Un statut par affaire, jamais figé sur la fiche personne.">
         {affaire.personnes?.length ? (
           <ul className="flex flex-col divide-y divide-line">
             {affaire.personnes.map((personne) => (
@@ -105,7 +105,7 @@ export default async function AffairePage({
         <form action={actionRattacherPersonne} className="flex flex-wrap items-end gap-3 border-t border-line pt-4">
           <input type="hidden" name="affaire_id" value={affaire.id} />
           <Field label="ID personne" htmlFor="personne_id">
-            <TextInput id="personne_id" name="personne_id" type="number" required className="w-28" />
+            <TextInput id="personne_id" name="personne_id" type="number" required placeholder="Ex. 42" className="w-28" />
           </Field>
           <Field label="Statut" htmlFor="statut">
             <Select id="statut" name="statut" required>
@@ -120,7 +120,7 @@ export default async function AffairePage({
         </form>
       </Card>
 
-      <Card title="Procès-verbaux" description="§6.3 — un PV signé devient immuable ; toute correction passe par un rectificatif.">
+      <Card title="Procès-verbaux" description="Un PV signé devient immuable ; toute correction passe par un rectificatif.">
         {affaire.proces_verbaux?.length ? (
           <ul className="flex flex-col gap-3">
             {affaire.proces_verbaux.map((pv) => (
@@ -183,13 +183,13 @@ export default async function AffairePage({
             </Field>
           </div>
           <Field label="Contenu" htmlFor="contenu">
-            <TextArea id="contenu" name="contenu" rows={3} required />
+            <TextArea id="contenu" name="contenu" rows={3} required placeholder="Ex. Le 27 août 2026 à 14h30, nous, officier de police judiciaire..." />
           </Field>
           <SubmitButton variant="secondary">Rédiger le PV</SubmitButton>
         </form>
       </Card>
 
-      <Card title="Pièces versées" description="§6.3, §9 — cotées automatiquement à l'ordre du versement ; stockage chiffré.">
+      <Card title="Pièces versées" description="Cotées automatiquement à l'ordre du versement ; stockage chiffré.">
         <ListePiecesVersees documents={affaire.documents} />
         <div className="border-t border-line pt-4">
           <FormulaireVersementPiece
@@ -200,7 +200,7 @@ export default async function AffairePage({
         </div>
       </Card>
 
-      <Card title="Scellés" description="§6.4 — chaîne de conservation : chaque mouvement est tracé, jamais corrigé.">
+      <Card title="Scellés" description="Chaîne de conservation : chaque mouvement est tracé, jamais corrigé.">
         {affaire.scelles?.length ? (
           <ul className="flex flex-col gap-3">
             {affaire.scelles.map((scelle) => (
@@ -244,7 +244,7 @@ export default async function AffairePage({
                     </Select>
                   </Field>
                   <Field label="Motif" htmlFor={`motif-${scelle.id}`}>
-                    <TextInput id={`motif-${scelle.id}`} name="motif" />
+                    <TextInput id={`motif-${scelle.id}`} name="motif" placeholder="Ex. Expertise balistique" />
                   </Field>
                   <SubmitButton variant="secondary">Enregistrer</SubmitButton>
                 </form>
@@ -258,13 +258,13 @@ export default async function AffairePage({
         <form action={actionEnregistrerScelle} className="flex flex-wrap items-end gap-3 border-t border-line pt-4">
           <input type="hidden" name="affaire_id" value={affaire.id} />
           <Field label="Numéro" htmlFor="numero_scelle">
-            <TextInput id="numero_scelle" name="numero_scelle" required />
+            <TextInput id="numero_scelle" name="numero_scelle" required placeholder="Ex. SC-2026-014" />
           </Field>
           <Field label="Description" htmlFor="description-scelle">
-            <TextInput id="description-scelle" name="description" required />
+            <TextInput id="description-scelle" name="description" required placeholder="Ex. Téléphone portable, sous scellé plastique" />
           </Field>
           <Field label="Lieu de saisie" htmlFor="lieu_saisie">
-            <TextInput id="lieu_saisie" name="lieu_saisie" />
+            <TextInput id="lieu_saisie" name="lieu_saisie" placeholder="Ex. Domicile du mis en cause" />
           </Field>
           <SubmitButton variant="secondary">Enregistrer le scellé</SubmitButton>
         </form>

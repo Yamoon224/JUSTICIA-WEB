@@ -17,7 +17,7 @@ export default async function CasierPage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.10 — Casier judiciaire"
+        eyebrow="Casier judiciaire"
         title="Casier judiciaire"
         description="Recherchez une personne pour consulter ou gérer son casier."
       />

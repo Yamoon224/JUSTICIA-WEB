@@ -25,7 +25,7 @@ export default async function PersonnePage({
   if (!motif) {
     return (
       <div className="flex max-w-md flex-col gap-6">
-        <PageHeader eyebrow="§6.2, §8" title="Motif de consultation requis" />
+        <PageHeader title="Motif de consultation requis" />
         <Card>
           <div className="flex items-start gap-3">
             <ShieldQuestion size={20} className="mt-0.5 shrink-0 text-gold" />
@@ -50,7 +50,7 @@ export default async function PersonnePage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <PageHeader
-        eyebrow="§6.2 — Fiche personne"
+        eyebrow="Fiche personne"
         title={personne.nom_affichage}
         description={personne.identifiant_unique}
         actions={
@@ -81,7 +81,7 @@ export default async function PersonnePage({
         </dl>
       </Card>
 
-      <Card title="Pièces versées" description="§6.2, §9 — photo, pièces d'identité numérisées ; stockage chiffré.">
+      <Card title="Pièces versées" description="Photo, pièces d'identité numérisées ; stockage chiffré.">
         <ListePiecesVersees documents={personne.documents} />
         <div className="border-t border-line pt-4">
           <FormulaireVersementPiece
@@ -98,7 +98,7 @@ export default async function PersonnePage({
           <input type="hidden" name="personne_id" value={personne.id} />
           <input type="hidden" name="motif" value={motif} />
           <Field label="ID de la fiche à absorber" htmlFor="personne_absorbee_id">
-            <TextInput id="personne_absorbee_id" name="personne_absorbee_id" type="number" required className="w-44" />
+            <TextInput id="personne_absorbee_id" name="personne_absorbee_id" type="number" required placeholder="Ex. 42" className="w-44" />
           </Field>
           <SubmitButton variant="secondary">
             <Combine size={16} />

@@ -40,7 +40,7 @@ export default async function AdministrationPage({
   return (
     <div className="flex max-w-3xl flex-col gap-6">
       <PageHeader
-        eyebrow="§6.13 — Administration"
+        eyebrow="Administration"
         title="Comptes et habilitations"
         description="Création de comptes à double validation, affectation des rôles, référentiel des infractions."
         actions={
@@ -65,7 +65,7 @@ export default async function AdministrationPage({
 
       <Card
         title="Comptes"
-        description="La validation d'un compte doit être faite par un administrateur distinct de son créateur (double validation, §6.13)."
+        description="La validation d'un compte doit être faite par un administrateur distinct de son créateur (double validation)."
       >
         {agents.length === 0 ? (
           <EmptyState message="Aucun compte." />
@@ -167,19 +167,19 @@ export default async function AdministrationPage({
         <form action={actionCreerCompte} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <input type="hidden" name="en_attente" value={enAttenteSeulement ? "1" : "0"} />
           <Field label="Matricule" htmlFor="matricule">
-            <TextInput id="matricule" name="matricule" required />
+            <TextInput id="matricule" name="matricule" required placeholder="Ex. OPJ-0123" />
           </Field>
           <Field label="Email" htmlFor="email" hint="facultatif">
-            <TextInput id="email" name="email" type="email" />
+            <TextInput id="email" name="email" type="email" placeholder="agent@justicia.test" />
           </Field>
           <Field label="Nom" htmlFor="nom">
-            <TextInput id="nom" name="nom" required />
+            <TextInput id="nom" name="nom" required placeholder="Ex. Kouassi" />
           </Field>
           <Field label="Prénom" htmlFor="prenom">
-            <TextInput id="prenom" name="prenom" required />
+            <TextInput id="prenom" name="prenom" required placeholder="Ex. Awa" />
           </Field>
           <Field label="Mot de passe initial" htmlFor="password">
-            <TextInput id="password" name="password" type="password" required minLength={8} />
+            <TextInput id="password" name="password" type="password" required minLength={8} placeholder="8 caractères minimum" />
           </Field>
           <Field label="Service" htmlFor="service_id">
             <Select id="service_id" name="service_id" defaultValue="">
@@ -217,7 +217,7 @@ export default async function AdministrationPage({
         <form action={actionCreerInfraction} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <input type="hidden" name="en_attente" value={enAttenteSeulement ? "1" : "0"} />
           <Field label="Code" htmlFor="code" hint="ex. CP-311">
-            <TextInput id="code" name="code" required />
+            <TextInput id="code" name="code" required placeholder="Ex. CP-311" />
           </Field>
           <Field label="Catégorie" htmlFor="categorie">
             <Select id="categorie" name="categorie" required>
@@ -228,11 +228,11 @@ export default async function AdministrationPage({
           </Field>
           <div className="sm:col-span-2">
             <Field label="Libellé" htmlFor="libelle">
-              <TextInput id="libelle" name="libelle" required />
+              <TextInput id="libelle" name="libelle" required placeholder="Ex. Vol simple" />
             </Field>
           </div>
           <Field label="Texte de référence" htmlFor="texte_reference" hint="facultatif">
-            <TextInput id="texte_reference" name="texte_reference" />
+            <TextInput id="texte_reference" name="texte_reference" placeholder="Ex. Loi n° 2026-001 du 12 janvier 2026" />
           </Field>
           <Field label="Date d'entrée en vigueur" htmlFor="date_entree_vigueur">
             <TextInput id="date_entree_vigueur" name="date_entree_vigueur" type="date" required />

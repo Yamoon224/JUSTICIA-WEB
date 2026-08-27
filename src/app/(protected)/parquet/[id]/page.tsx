@@ -38,7 +38,7 @@ export default async function DossierParquetPage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <div className="flex flex-col gap-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">§6.5 — Parquet</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">Parquet</span>
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">
             <Mono>{affaire.numero_affaire}</Mono>
@@ -94,7 +94,7 @@ export default async function DossierParquetPage({
       )}
 
       {dossier.magistrat_id && !dossier.orientation && (
-        <Card title="Orientation des poursuites" description="Décision toujours humaine — le système ne s'auto-oriente jamais (§3).">
+        <Card title="Orientation des poursuites" description="Décision toujours humaine — le système ne s'auto-oriente jamais.">
           <form action={actionOrienterDossier} className="flex flex-col gap-4">
             <input type="hidden" name="dossier_id" value={dossier.id} />
             <Field label="Orientation" htmlFor="orientation">
@@ -127,7 +127,7 @@ export default async function DossierParquetPage({
         </Card>
       )}
 
-      <Card title="Réquisitions" description="§6.5 — consignées aux différentes étapes de la procédure.">
+      <Card title="Réquisitions" description="Consignées aux différentes étapes de la procédure.">
         {dossier.requisitions?.length ? (
           <ul className="flex flex-col divide-y divide-line">
             {dossier.requisitions.map((requisition) => (
@@ -158,7 +158,7 @@ export default async function DossierParquetPage({
             </Field>
           </div>
           <Field label="Contenu" htmlFor="contenu-requisition">
-            <TextArea id="contenu-requisition" name="contenu" rows={2} required />
+            <TextArea id="contenu-requisition" name="contenu" rows={2} required placeholder="Ex. Réquisition de placement en détention provisoire." />
           </Field>
           <SubmitButton variant="secondary">Enregistrer la réquisition</SubmitButton>
         </form>

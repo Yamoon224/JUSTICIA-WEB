@@ -24,7 +24,7 @@ export default async function ParquetPage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.5 — Bureau des arrivées"
+        eyebrow="Bureau des arrivées"
         title="Parquet"
         description="Dossiers reçus, affectation aux magistrats et orientation des poursuites."
       />

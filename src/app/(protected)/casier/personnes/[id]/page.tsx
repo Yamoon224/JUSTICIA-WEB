@@ -46,7 +46,7 @@ export default async function CasierPersonnePage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">§6.10 — Casier judiciaire</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">Casier judiciaire</span>
         <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">{nom || `Personne #${personneId}`}</h1>
       </div>
 

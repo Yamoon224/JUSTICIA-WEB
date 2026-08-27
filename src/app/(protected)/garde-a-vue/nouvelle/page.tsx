@@ -17,7 +17,7 @@ export default async function NouvelleGardeAVuePage({
   if (!affaireId) {
     return (
       <div className="flex max-w-md flex-col gap-6">
-        <PageHeader eyebrow="§6.1" title="Affaire requise" />
+        <PageHeader title="Affaire requise" />
         <Card>
           <p className="text-sm text-ink-soft">
             Le placement en garde à vue se fait depuis la fiche d&apos;une affaire, pour une personne déjà rattachée.
@@ -32,7 +32,7 @@ export default async function NouvelleGardeAVuePage({
   return (
     <div className="flex max-w-lg flex-col gap-6">
       <PageHeader
-        eyebrow="§6.1 — Garde à vue"
+        eyebrow="Garde à vue"
         title="Placement en garde à vue"
         description={`Affaire ${affaire.numero_affaire} — la durée légale sera calculée automatiquement.`}
       />

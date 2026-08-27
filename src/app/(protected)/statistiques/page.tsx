@@ -46,7 +46,7 @@ export default async function StatistiquesPage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.11-6.12 — Statistiques et pilotage"
+        eyebrow="Statistiques et pilotage"
         title="Statistiques"
         description={
           tableau.ressort_id
@@ -85,7 +85,6 @@ export default async function StatistiquesPage({
 
         <Card
           title="Garde à vue"
-          description="§6.1"
           actions={<ShieldAlert size={18} className="text-ink-faint" />}
         >
           <Statistique label="En cours" valeur={tableau.garde_a_vue.en_cours} />
@@ -98,7 +97,6 @@ export default async function StatistiquesPage({
 
         <Card
           title="Parquet"
-          description="§6.5"
           actions={<Gavel size={18} className="text-ink-faint" />}
         >
           <Statistique label="En attente d'orientation" valeur={tableau.parquet.en_attente_orientation} />
@@ -107,7 +105,6 @@ export default async function StatistiquesPage({
 
         <Card
           title="Instruction"
-          description="§6.6"
           actions={<Scale size={18} className="text-ink-faint" />}
         >
           <Statistique label="Dossiers ouverts" valeur={tableau.instruction.dossiers_ouverts} />
@@ -121,7 +118,6 @@ export default async function StatistiquesPage({
 
         <Card
           title="Audiencement"
-          description="§6.7-6.8"
           actions={<Landmark size={18} className="text-ink-faint" />}
         >
           <Statistique label="À enrôler" valeur={tableau.audiencement.a_enroler} />
@@ -131,7 +127,6 @@ export default async function StatistiquesPage({
 
         <Card
           title="Exécution des peines"
-          description="§6.9"
           actions={<AlertTriangle size={18} className="text-ink-faint" />}
         >
           <Statistique label="Dossiers en cours" valeur={tableau.execution.dossiers_en_cours} />
@@ -145,7 +140,7 @@ export default async function StatistiquesPage({
 
         <Card
           title="Casier judiciaire"
-          description="§6.10 — registre national, non cloisonné par ressort"
+          description="Registre national, non cloisonné par ressort"
           actions={<BookLock size={18} className="text-ink-faint" />}
         >
           <Statistique label="Total" valeur={tableau.casier.total} />
@@ -156,7 +151,6 @@ export default async function StatistiquesPage({
 
         <Card
           title="Délais moyens de traitement"
-          description="§6.11"
           actions={<Clock size={18} className="text-ink-faint" />}
         >
           <Statistique label="Garde à vue" valeur={formatDuree(tableau.delais_moyens_jours.garde_a_vue_heures, "h")} />

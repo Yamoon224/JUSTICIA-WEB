@@ -26,7 +26,7 @@ export default async function ExecutionPage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.9 — Exécution des peines"
+        eyebrow="Exécution des peines"
         title="Exécution"
         description="Écrou, situations pénales, amendes, travail d'intérêt général et mises à l'épreuve."
       />

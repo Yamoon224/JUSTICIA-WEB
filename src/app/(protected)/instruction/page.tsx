@@ -24,7 +24,7 @@ export default async function InstructionPage({
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.6 — Cabinet d'instruction"
+        eyebrow="Cabinet d'instruction"
         title="Instruction"
         description="Dossiers d'information : mise en examen, actes, mandats, mesures de sûreté."
       />

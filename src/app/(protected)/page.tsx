@@ -17,7 +17,7 @@ export default async function DashboardPage() {
       <PageHeader
         eyebrow="Tableau de bord"
         title={agent ? `Bonjour, ${agent.prenom}` : "Bonjour"}
-        description="Modules accessibles selon votre habilitation et votre ressort (§8 du cahier des charges)."
+        description="Modules accessibles selon votre habilitation et votre ressort."
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">

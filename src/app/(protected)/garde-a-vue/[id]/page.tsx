@@ -41,7 +41,7 @@ export default async function MesureGardeAVuePage({
   return (
     <div className="flex max-w-2xl flex-col gap-6">
       <div className="flex flex-col gap-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">§6.1 — Garde à vue</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] text-seal">Garde à vue</span>
         <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-display text-2xl font-medium text-ink sm:text-3xl">Mesure #{mesure.id}</h1>
           <Badge tone={mesure.statut === "terminee" ? "forest" : "neutral"}>{mesure.statut.replaceAll("_", " ")}</Badge>
@@ -54,7 +54,7 @@ export default async function MesureGardeAVuePage({
       {mesure.echeance_depassee && enCours && (
         <div className="flex items-center gap-3 rounded-2xl border border-rust/30 bg-rust-tint px-5 py-4 text-rust">
           <ShieldAlert size={20} className="shrink-0" />
-          <p className="text-sm font-medium">Échéance légale dépassée — signalement prioritaire requis (§6.11).</p>
+          <p className="text-sm font-medium">Échéance légale dépassée — signalement prioritaire requis.</p>
         </div>
       )}
 
@@ -87,10 +87,10 @@ export default async function MesureGardeAVuePage({
           <form action={actionProlongerGardeAVue} className="flex flex-wrap items-end gap-3 border-t border-line pt-4">
             <input type="hidden" name="mesure_id" value={mesure.id} />
             <Field label="Prolonger de (heures)" htmlFor="heures">
-              <TextInput id="heures" name="heures" type="number" min={1} max={96} required className="w-24" />
+              <TextInput id="heures" name="heures" type="number" min={1} max={96} required placeholder="Ex. 24" className="w-24" />
             </Field>
-            <Field label="ID magistrat autorisant" htmlFor="autorise_par_id" hint="autorisation parquet — §6.1">
-              <TextInput id="autorise_par_id" name="autorise_par_id" type="number" required className="w-44" />
+            <Field label="ID magistrat autorisant" htmlFor="autorise_par_id" hint="autorisation parquet">
+              <TextInput id="autorise_par_id" name="autorise_par_id" type="number" required placeholder="Ex. 12" className="w-44" />
             </Field>
             <SubmitButton variant="secondary">Prolonger</SubmitButton>
           </form>
@@ -190,7 +190,7 @@ export default async function MesureGardeAVuePage({
               </Field>
             </div>
             <Field label="Notes" htmlFor="notes">
-              <TextArea id="notes" name="notes" rows={2} />
+              <TextArea id="notes" name="notes" rows={2} placeholder="Ex. Audition menée en présence de l'avocat." />
             </Field>
             <SubmitButton variant="secondary">Enregistrer l&apos;acte</SubmitButton>
           </form>

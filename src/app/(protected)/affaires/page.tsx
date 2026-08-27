@@ -24,7 +24,7 @@ export default async function AffairesPage({ searchParams }: { searchParams: Pro
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="§6.3 — Dossiers"
+        eyebrow="Dossiers"
         title="Affaires"
         description="Dossiers de votre ressort, de l'ouverture à la transmission au parquet."
         actions={
