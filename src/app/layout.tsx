@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Mono, Public_Sans } from "next/font/google";
-import Script from "next/script";
+import { cookies } from "next/headers";
 import "./globals.css";
+
+import { COOKIE_THEME, type ThemeExplicite } from "@/lib/theme-constants";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -27,25 +29,21 @@ export const metadata: Metadata = {
   description: "Système de gestion de la chaîne pénale",
 };
 
-const SCRIPT_THEME_INITIAL = `(function(){try{var t=localStorage.getItem("justicia-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}}catch(e){}})();`;
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Thème lu côté serveur (cookie posé par appliquerTheme(), voir lib/theme.ts)
+  // et appliqué directement dans le HTML généré : pas de script d'initialisation
+  // avant hydratation, donc pas de flash du mauvais thème ni de <script> rendu
+  // par un composant (voir le commentaire dans lib/theme.ts).
+  const valeurCookie = (await cookies()).get(COOKIE_THEME)?.value;
+  const theme: ThemeExplicite | undefined = valeurCookie === "light" || valeurCookie === "dark" ? valeurCookie : undefined;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="fr"
+      data-theme={theme}
       className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable} h-full antialiased`}
-      // Le script ci-dessous pose `data-theme` avant l'hydratation (pour éviter
-      // un flash du mauvais thème) : cet attribut diffère donc volontairement
-      // du HTML rendu côté serveur, qui ne connaît pas la préférence stockée.
-      suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
-        {/* Applique le thème choisi manuellement avant le premier rendu, pour éviter un flash du mauvais thème. */}
-        <Script id="theme-initial" strategy="beforeInteractive">
-          {SCRIPT_THEME_INITIAL}
-        </Script>
-        {children}
-      </body>
+      <body className="flex min-h-full flex-col bg-paper font-sans text-ink">{children}</body>
     </html>
   );
 }
