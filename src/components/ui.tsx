@@ -238,11 +238,11 @@ export function Mono({ children, className = "" }: { children: ReactNode; classN
 /**
  * Affiche le HTML produit par <RichTextArea> (rich-text-editor.tsx), avec la
  * même typographie que la zone d'édition (voir .rich-text-content dans
- * globals.css). Le HTML provient exclusivement du schéma Tiptap/ProseMirror
- * restreint de cet éditeur — jamais de source externe — ce qui rend ce
- * dangerouslySetInnerHTML sûr : aucune balise ni attribut hors de ce jeu
- * restreint (paragraphes, gras/italique/souligné/barré, listes, citation,
- * alignement) ne peut s'y trouver.
+ * globals.css). Le schéma Tiptap/ProseMirror restreint l'éditeur, mais rien
+ * n'empêche un appel direct à l'API en dehors de cette interface : la
+ * garantie qui rend ce dangerouslySetInnerHTML sûr est le nettoyage
+ * appliqué côté back-end à l'écriture (TexteEnrichiSanitizer, HTMLPurifier),
+ * pas la seule provenance supposée du HTML.
  */
 export function RichText({ html, fallback, className = "" }: { html?: string | null; fallback?: string; className?: string }) {
   if (!html) {

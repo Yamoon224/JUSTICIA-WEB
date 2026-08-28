@@ -25,9 +25,12 @@ import type { ReactNode } from "react";
  * Éditeur de texte enrichi (façon traitement de texte : gras, italique,
  * listes, alignement) pour les champs qui accueillent un texte de fond
  * (contenu de PV, description, obligations...). Le schéma Tiptap/ProseMirror
- * n'autorise que ce jeu restreint de balises — pas d'image, pas de lien,
- * pas de HTML brut collé — pour que le HTML produit reste sûr à réafficher
- * ailleurs dans l'appli via <RichText> (voir ui.tsx) sans risque d'injection.
+ * n'autorise que ce jeu restreint de balises — pas d'image, pas de lien, pas
+ * de HTML brut collé — mais ce n'est qu'un confort d'édition : cette
+ * restriction ne s'applique qu'à qui passe par cette interface. La sécurité
+ * réelle du HTML réaffiché ailleurs (<RichText> dans ui.tsx, PDF du PV) vient
+ * du nettoyage appliqué côté back-end à l'écriture (TexteEnrichiSanitizer),
+ * pas de ce composant.
  *
  * Soumis via un champ texte synchronisé (sr-only, pas `type="hidden"` pour
  * que `required` reste vérifié par le navigateur) afin de fonctionner avec
