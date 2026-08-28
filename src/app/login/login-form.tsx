@@ -5,6 +5,7 @@ import { Loader2, LogIn } from "lucide-react";
 import { useState } from "react";
 import type { FormEvent } from "react";
 
+import { PasswordInput } from "@/components/password-input";
 import { ErrorBanner, Field, TextInput } from "@/components/ui";
 
 /**
@@ -69,10 +70,9 @@ export function LoginForm() {
       </Field>
 
       <Field label="Mot de passe" htmlFor="password">
-        <TextInput
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           autoComplete="current-password"
           required
           value={password}

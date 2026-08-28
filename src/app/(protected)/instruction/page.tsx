@@ -3,6 +3,7 @@ import { FileSearch } from "lucide-react";
 
 import { Badge, EmptyState, Mono, PageHeader } from "@/components/ui";
 import { listerDossiersInstruction, type FiltreDossiersInstruction } from "@/lib/api/instruction";
+import { htmlVersExtrait } from "@/lib/rich-text";
 
 export const metadata = { title: "Instruction — JUSTICIA" };
 
@@ -60,7 +61,7 @@ export default async function InstructionPage({
                   <FileSearch size={14} className="text-ink-faint" />
                   <Mono className="font-medium text-ink group-hover:text-seal">{dossier.affaire.numero_affaire}</Mono>
                 </span>
-                <span className="text-sm text-ink-soft">{dossier.affaire.description || "Aucune description."}</span>
+                <span className="truncate text-sm text-ink-soft">{htmlVersExtrait(dossier.affaire.description) || "Aucune description."}</span>
               </div>
               <div className="flex items-center gap-2">
                 {dossier.statut === "cloture" ? (

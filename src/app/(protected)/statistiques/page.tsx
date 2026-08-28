@@ -1,5 +1,6 @@
 import { AlertTriangle, BarChart3, BookLock, Clock, Gavel, Landmark, Scale, ShieldAlert } from "lucide-react";
 
+import { BarChartCard, PieChartCard } from "@/components/charts";
 import { Badge, Card, PageHeader, Select } from "@/components/ui";
 import { listerRessorts } from "@/lib/api/referentiels";
 import { obtenirTableauDeBord } from "@/lib/api/statistiques";
@@ -80,7 +81,7 @@ export default async function StatistiquesPage({
           description={`${tableau.affaires.total} au total`}
           actions={<BarChart3 size={18} className="text-ink-faint" />}
         >
-          <Repartition donnees={tableau.affaires.par_statut} libelles={LIBELLES_STATUT_AFFAIRE} />
+          <BarChartCard donnees={versEntreesGraphe(tableau.affaires.par_statut, LIBELLES_STATUT_AFFAIRE)} />
         </Card>
 
         <Card
@@ -100,7 +101,7 @@ export default async function StatistiquesPage({
           actions={<Gavel size={18} className="text-ink-faint" />}
         >
           <Statistique label="En attente d'orientation" valeur={tableau.parquet.en_attente_orientation} />
-          <Repartition donnees={tableau.parquet.orientations_par_type} libelles={LIBELLES_ORIENTATION} />
+          <PieChartCard donnees={versEntreesGraphe(tableau.parquet.orientations_par_type, LIBELLES_ORIENTATION)} />
         </Card>
 
         <Card
@@ -175,29 +176,10 @@ function Statistique({ label, valeur, alerte = false }: { label: string; valeur:
   );
 }
 
-function Repartition({ donnees, libelles }: { donnees: Record<string, number>; libelles: Record<string, string> }) {
-  const entrees = Object.entries(donnees);
-  const maximum = Math.max(1, ...entrees.map(([, n]) => n));
-
-  if (entrees.length === 0) {
-    return <p className="text-sm text-ink-faint">Aucune donnée.</p>;
-  }
-
-  return (
-    <ul className="flex flex-col gap-2">
-      {entrees.map(([cle, valeur]) => (
-        <li key={cle} className="flex flex-col gap-1">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-ink-soft">{libelles[cle] ?? cle}</span>
-            <span className="font-medium text-ink">{valeur}</span>
-          </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-paper-sunken">
-            <div className="h-full rounded-full bg-seal/70" style={{ width: `${(valeur / maximum) * 100}%` }} />
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
+// Le back-end agrège par GROUP BY : seuls les statuts effectivement observés
+// remontent (jamais de valeur à 0 dans donnees), pas besoin de filtrer ici.
+function versEntreesGraphe(donnees: Record<string, number>, libelles: Record<string, string>): { label: string; valeur: number }[] {
+  return Object.entries(donnees).map(([cle, valeur]) => ({ label: libelles[cle] ?? cle, valeur }));
 }
 
 function formatDuree(valeur: number | null, unite: string): string {

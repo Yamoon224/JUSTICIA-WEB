@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRightLeft, Banknote, HardHat, Handshake, Lock, ScrollText, Unlock } from "lucide-react";
 
-import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, Select, SubmitButton, TextInput } from "@/components/ui";
+import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, RichText, Select, SubmitButton, TextInput } from "@/components/ui";
 import {
   actionAffecterTig,
   actionDecideAmenagement,
@@ -75,7 +75,7 @@ export default async function DossierExecutionPage({
 
       {affaire && (
         <Card title="Dossier">
-          <p className="text-sm text-ink-soft">{affaire.description || "Aucune description."}</p>
+          <RichText html={affaire.description} fallback="Aucune description." />
           <div className="flex flex-wrap gap-1.5">
             {affaire.infractions?.map((infraction) => (
               <Badge key={infraction.id} tone="seal">
@@ -369,10 +369,10 @@ export default async function DossierExecutionPage({
       <Card title="Mise à l'épreuve" actions={dossier.mise_a_l_epreuve && <Handshake size={16} className="text-ink-faint" />}>
         {dossier.mise_a_l_epreuve ? (
           <div className="flex flex-col gap-4">
-            <p className="flex items-start gap-2 text-sm text-ink-soft">
+            <div className="flex items-start gap-2">
               <ScrollText size={15} className="mt-0.5 shrink-0 text-ink-faint" />
-              {dossier.mise_a_l_epreuve.obligations}
-            </p>
+              <RichText html={dossier.mise_a_l_epreuve.obligations} className="flex-1" />
+            </div>
             <Badge tone={dossier.mise_a_l_epreuve.statut === "terminee" ? "forest" : "gold"}>
               {dossier.mise_a_l_epreuve.statut === "terminee" ? "levée" : "en cours"}
             </Badge>

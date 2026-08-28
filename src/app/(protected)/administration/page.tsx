@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Ban, Play, ShieldCheck, UserPlus } from "lucide-react";
 
+import { PasswordInput } from "@/components/password-input";
 import { Badge, Card, EmptyState, ErrorBanner, Field, PageHeader, Select, SubmitButton, TextInput } from "@/components/ui";
 import {
   actionAssignerRoles,
@@ -179,7 +180,7 @@ export default async function AdministrationPage({
             <TextInput id="prenom" name="prenom" required placeholder="Ex. Awa" />
           </Field>
           <Field label="Mot de passe initial" htmlFor="password">
-            <TextInput id="password" name="password" type="password" required minLength={8} placeholder="8 caractères minimum" />
+            <PasswordInput id="password" name="password" required minLength={8} placeholder="8 caractères minimum" />
           </Field>
           <Field label="Service" htmlFor="service_id">
             <Select id="service_id" name="service_id" defaultValue="">

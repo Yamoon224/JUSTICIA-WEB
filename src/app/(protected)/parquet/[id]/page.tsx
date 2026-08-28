@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft, Gavel, Scale, UserCog } from "lucide-react";
 
-import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, Select, SubmitButton, TextArea } from "@/components/ui";
+import { RichTextArea } from "@/components/rich-text-editor";
+import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, RichText, Select, SubmitButton } from "@/components/ui";
 import { actionAffecterMagistrat, actionEnregistrerRequisition, actionOrienterDossier } from "@/features/parquet/actions";
 import { obtenirDossierParquet } from "@/lib/api/parquet";
 import { listerMagistrats, listerMotifsClassement } from "@/lib/api/referentiels";
@@ -56,7 +57,7 @@ export default async function DossierParquetPage({
       <ErrorBanner message={erreur} />
 
       <Card title="Dossier">
-        <p className="text-sm text-ink-soft">{affaire.description || "Aucune description."}</p>
+        <RichText html={affaire.description} fallback="Aucune description." />
         <div className="flex flex-wrap gap-1.5">
           {affaire.infractions?.map((infraction) => (
             <Badge key={infraction.id} tone="seal">
@@ -136,7 +137,7 @@ export default async function DossierParquetPage({
                   <Gavel size={14} className="text-ink-faint" />
                   {requisition.type}
                 </span>
-                <span className="text-sm text-ink-soft">{requisition.contenu}</span>
+                <RichText html={requisition.contenu} />
               </li>
             ))}
           </ul>
@@ -158,7 +159,7 @@ export default async function DossierParquetPage({
             </Field>
           </div>
           <Field label="Contenu" htmlFor="contenu-requisition">
-            <TextArea id="contenu-requisition" name="contenu" rows={2} required placeholder="Ex. Réquisition de placement en détention provisoire." />
+            <RichTextArea id="contenu-requisition" name="contenu" rows={2} required placeholder="Ex. Réquisition de placement en détention provisoire." />
           </Field>
           <SubmitButton variant="secondary">Enregistrer la réquisition</SubmitButton>
         </form>

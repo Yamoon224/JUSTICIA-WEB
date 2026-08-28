@@ -3,6 +3,7 @@ import { Inbox } from "lucide-react";
 
 import { Badge, EmptyState, Mono, PageHeader } from "@/components/ui";
 import { listerDossiersParquet, type FiltreDossiers } from "@/lib/api/parquet";
+import { htmlVersExtrait } from "@/lib/rich-text";
 
 export const metadata = { title: "Parquet — JUSTICIA" };
 
@@ -60,7 +61,7 @@ export default async function ParquetPage({
                   <Inbox size={14} className="text-ink-faint" />
                   <Mono className="font-medium text-ink group-hover:text-seal">{dossier.affaire.numero_affaire}</Mono>
                 </span>
-                <span className="text-sm text-ink-soft">{dossier.affaire.description || "Aucune description."}</span>
+                <span className="truncate text-sm text-ink-soft">{htmlVersExtrait(dossier.affaire.description) || "Aucune description."}</span>
               </div>
               <div className="flex items-center gap-2">
                 {!dossier.magistrat_id && <Badge tone="gold">non affecté</Badge>}

@@ -15,7 +15,7 @@ import Link from "next/link";
  * visuellement d'un simple bloc de contenu (<Card>).
  */
 
-const fieldBase =
+export const fieldBase =
   "w-full rounded-lg border border-line bg-paper-raised px-3.5 py-2.5 text-[0.9rem] text-ink placeholder:text-ink-faint shadow-sm transition-colors focus:border-seal focus:outline-none focus:ring-2 focus:ring-seal/15 disabled:cursor-not-allowed disabled:bg-paper-sunken disabled:text-ink-faint";
 
 export function Label({ children, htmlFor, hint }: { children: ReactNode; htmlFor: string; hint?: string }) {
@@ -233,4 +233,21 @@ export function EmptyState({ message }: { message: string }) {
 
 export function Mono({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <span className={`font-mono text-[0.85em] tracking-tight ${className}`}>{children}</span>;
+}
+
+/**
+ * Affiche le HTML produit par <RichTextArea> (rich-text-editor.tsx), avec la
+ * même typographie que la zone d'édition (voir .rich-text-content dans
+ * globals.css). Le HTML provient exclusivement du schéma Tiptap/ProseMirror
+ * restreint de cet éditeur — jamais de source externe — ce qui rend ce
+ * dangerouslySetInnerHTML sûr : aucune balise ni attribut hors de ce jeu
+ * restreint (paragraphes, gras/italique/souligné/barré, listes, citation,
+ * alignement) ne peut s'y trouver.
+ */
+export function RichText({ html, fallback, className = "" }: { html?: string | null; fallback?: string; className?: string }) {
+  if (!html) {
+    return fallback ? <p className={`text-sm text-ink-faint ${className}`}>{fallback}</p> : null;
+  }
+
+  return <div className={`rich-text-content text-sm text-ink-soft ${className}`} dangerouslySetInnerHTML={{ __html: html }} />;
 }

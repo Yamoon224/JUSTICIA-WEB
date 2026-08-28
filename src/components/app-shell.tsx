@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
-import { useState, useSyncExternalStore, type ReactNode } from "react";
+import { Bell, ChevronLeft, ChevronRight, LogOut, Menu, Settings, UserRound, X } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 
-import { LogoutButton } from "@/components/logout-button";
+import { LogoutButton, useLogout } from "@/components/logout-button";
 import { MODULE_ICONS } from "@/components/module-icons";
 import { SealMark } from "@/components/seal-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -62,7 +62,7 @@ function NavLinks({
   reduit?: boolean;
 }) {
   return (
-    <nav className={`flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto py-4 ${reduit ? "px-2" : "px-3"}`}>
+    <nav className={`scroll-slim flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto py-4 ${reduit ? "px-2" : "px-3"}`}>
       {grouper(modules).map(({ groupe, modules: modulesDuGroupe }) => (
         <div key={groupe} className="flex flex-col gap-0.5">
           {reduit ? (
@@ -97,9 +97,13 @@ function NavLinks({
                 href={module.href}
                 onClick={onNavigate}
                 title={reduit ? module.label : undefined}
-                className={`group flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
+                className={`group flex items-center gap-3 rounded-lg text-sm font-medium transition-all ${
                   reduit ? "justify-center p-2.5" : "px-3 py-2"
-                } ${actif ? "bg-seal-tint text-seal-strong" : "text-ink-soft hover:bg-paper-sunken hover:text-ink"}`}
+                } ${
+                  actif
+                    ? "bg-seal-tint text-seal-strong shadow-sm"
+                    : "text-ink-soft hover:-translate-y-px hover:bg-paper-sunken hover:text-ink hover:shadow-sm"
+                }`}
               >
                 <Icon
                   size={17}
@@ -116,9 +120,17 @@ function NavLinks({
   );
 }
 
-function TopBar({ onOpenMenu, alertesNonLues }: { onOpenMenu: () => void; alertesNonLues: number }) {
+function TopBar({
+  agent,
+  onOpenMenu,
+  alertesNonLues,
+}: {
+  agent: Agent;
+  onOpenMenu: () => void;
+  alertesNonLues: number;
+}) {
   return (
-    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-line bg-paper-raised/85 px-4 backdrop-blur-sm sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-line bg-paper-raised/85 px-4 shadow-[var(--shadow-topbar)] backdrop-blur-sm sm:px-6 lg:px-10">
       <button
         aria-label="Ouvrir le menu"
         onClick={onOpenMenu}
@@ -147,7 +159,105 @@ function TopBar({ onOpenMenu, alertesNonLues }: { onOpenMenu: () => void; alerte
           </span>
         )}
       </Link>
+
+      <UserMenu agent={agent} />
     </header>
+  );
+}
+
+function UserMenu({ agent }: { agent: Agent }) {
+  const [ouvert, setOuvert] = useState(false);
+  const conteneurRef = useRef<HTMLDivElement>(null);
+  const { deconnecter, enCours } = useLogout();
+
+  useEffect(() => {
+    if (!ouvert) return;
+
+    function surClicExterieur(event: MouseEvent) {
+      if (conteneurRef.current && !conteneurRef.current.contains(event.target as Node)) {
+        setOuvert(false);
+      }
+    }
+
+    function surEchap(event: KeyboardEvent) {
+      if (event.key === "Escape") setOuvert(false);
+    }
+
+    document.addEventListener("mousedown", surClicExterieur);
+    document.addEventListener("keydown", surEchap);
+    return () => {
+      document.removeEventListener("mousedown", surClicExterieur);
+      document.removeEventListener("keydown", surEchap);
+    };
+  }, [ouvert]);
+
+  return (
+    <div className="relative" ref={conteneurRef}>
+      <button
+        type="button"
+        onClick={() => setOuvert((valeur) => !valeur)}
+        aria-haspopup="menu"
+        aria-expanded={ouvert}
+        aria-label="Menu du compte"
+        className={`flex h-9 w-9 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-paper-sunken hover:text-ink ${
+          ouvert ? "bg-paper-sunken text-ink" : ""
+        }`}
+      >
+        <UserRound size={18} strokeWidth={1.75} />
+      </button>
+
+      {ouvert && (
+        <div
+          role="menu"
+          className="absolute right-0 top-[calc(100%+0.5rem)] z-40 w-64 overflow-hidden rounded-xl border border-line bg-paper-raised shadow-[var(--shadow-card)]"
+        >
+          <div className="flex items-center gap-3 border-b border-line px-4 py-3.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-seal-tint font-display text-sm font-medium text-seal-strong">
+              {agent.prenom.charAt(0)}
+              {agent.nom.charAt(0)}
+            </div>
+            <div className="flex min-w-0 flex-col">
+              <span className="truncate text-sm font-medium text-ink">{agent.nom_complet}</span>
+              <span className="truncate font-mono text-xs text-ink-faint">{agent.matricule}</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-0.5 p-1.5">
+            <Link
+              href="/profil"
+              role="menuitem"
+              onClick={() => setOuvert(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:bg-paper-sunken hover:text-ink"
+            >
+              <UserRound size={16} strokeWidth={1.75} />
+              Profil
+            </Link>
+            <Link
+              href="/parametres"
+              role="menuitem"
+              onClick={() => setOuvert(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:bg-paper-sunken hover:text-ink"
+            >
+              <Settings size={16} strokeWidth={1.75} />
+              Paramètres
+            </Link>
+          </div>
+
+          <div className="border-t border-line p-1.5">
+            <button
+              type="button"
+              role="menuitem"
+              onClick={deconnecter}
+              disabled={enCours}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-ink-soft transition-colors hover:bg-rust-tint hover:text-rust disabled:opacity-50"
+            >
+              <LogOut size={16} strokeWidth={1.75} />
+              {enCours ? "Déconnexion..." : "Se déconnecter"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -199,7 +309,7 @@ export function AppShell({
     <div className="flex min-h-screen">
       {/* Navigation desktop */}
       <aside
-        className={`relative hidden shrink-0 flex-col border-r border-line bg-paper-raised transition-[width] duration-200 lg:sticky lg:top-0 lg:flex lg:h-screen ${
+        className={`relative hidden shrink-0 flex-col border-r border-line bg-paper-raised shadow-[var(--shadow-aside)] transition-[width] duration-200 lg:sticky lg:top-0 lg:flex lg:h-screen ${
           reduit ? "w-[4.5rem]" : "w-64"
         }`}
       >
@@ -256,7 +366,7 @@ export function AppShell({
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar onOpenMenu={() => setDrawerOuvert(true)} alertesNonLues={alertesNonLues} />
+        <TopBar agent={agent} onOpenMenu={() => setDrawerOuvert(true)} alertesNonLues={alertesNonLues} />
 
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">{children}</div>

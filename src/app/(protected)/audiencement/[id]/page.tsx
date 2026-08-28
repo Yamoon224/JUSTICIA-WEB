@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, CalendarClock, Gavel, Landmark, Scale, ScrollText } from "lucide-react";
 
-import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, Select, SubmitButton, TextInput } from "@/components/ui";
+import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, RichText, Select, SubmitButton, TextInput } from "@/components/ui";
 import {
   actionEnregistrerDecision,
   actionEnregistrerRecours,
@@ -66,7 +66,7 @@ export default async function DossierAudiencementPage({
       <ErrorBanner message={erreur} />
 
       <Card title="Dossier">
-        <p className="text-sm text-ink-soft">{affaire.description || "Aucune description."}</p>
+        <RichText html={affaire.description} fallback="Aucune description." />
         <div className="flex flex-wrap gap-1.5">
           {affaire.infractions?.map((infraction) => (
             <Badge key={infraction.id} tone="seal">

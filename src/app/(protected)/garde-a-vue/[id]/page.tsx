@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { AlarmClock, ArrowLeft, ClipboardList, DoorOpen, Gavel, ShieldAlert, UserCheck } from "lucide-react";
 
-import { Badge, Card, ErrorBanner, Field, Select, SubmitButton, TextArea, TextInput } from "@/components/ui";
+import { RichTextArea } from "@/components/rich-text-editor";
+import { Badge, Card, ErrorBanner, Field, Select, SubmitButton, TextInput } from "@/components/ui";
 import {
   actionAviserRepresentantLegal,
   actionCloturerGardeAVue,
@@ -190,7 +191,7 @@ export default async function MesureGardeAVuePage({
               </Field>
             </div>
             <Field label="Notes" htmlFor="notes">
-              <TextArea id="notes" name="notes" rows={2} placeholder="Ex. Audition menée en présence de l'avocat." />
+              <RichTextArea id="notes" name="notes" rows={2} placeholder="Ex. Audition menée en présence de l'avocat." />
             </Field>
             <SubmitButton variant="secondary">Enregistrer l&apos;acte</SubmitButton>
           </form>

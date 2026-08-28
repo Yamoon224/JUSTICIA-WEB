@@ -3,6 +3,7 @@ import { Gavel } from "lucide-react";
 
 import { Badge, EmptyState, Mono, PageHeader } from "@/components/ui";
 import { listerDossiersAudiencement, type FiltreDossiersAudiencement } from "@/lib/api/audiencement";
+import { htmlVersExtrait } from "@/lib/rich-text";
 
 export const metadata = { title: "Audiencement — JUSTICIA" };
 
@@ -66,10 +67,10 @@ export default async function AudiencementPage({
                   <Gavel size={14} className="text-ink-faint" />
                   <Mono className="font-medium text-ink group-hover:text-seal">{dossier.affaire.numero_affaire}</Mono>
                 </span>
-                <span className="text-sm text-ink-soft">
+                <span className="truncate text-sm text-ink-soft">
                   {dossier.date_audience
                     ? new Date(dossier.date_audience).toLocaleString("fr-FR", { dateStyle: "long", timeStyle: "short" })
-                    : dossier.affaire.description || "Aucune description."}
+                    : htmlVersExtrait(dossier.affaire.description) || "Aucune description."}
                 </span>
               </div>
               <Badge tone={dossier.statut === "jugee" ? "forest" : dossier.statut === "enrole" ? "neutral" : "gold"}>

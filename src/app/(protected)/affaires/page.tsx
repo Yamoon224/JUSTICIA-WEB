@@ -3,6 +3,7 @@ import { FolderPlus } from "lucide-react";
 
 import { Badge, EmptyState, LinkButton, Mono, PageHeader } from "@/components/ui";
 import { listerAffaires } from "@/lib/api/affaires";
+import { htmlVersExtrait } from "@/lib/rich-text";
 import type { StatutAffaire } from "@/types/affaire";
 
 export const metadata = { title: "Affaires — JUSTICIA" };
@@ -47,7 +48,7 @@ export default async function AffairesPage({ searchParams }: { searchParams: Pro
             >
               <div className="flex flex-col gap-1">
                 <Mono className="font-medium text-ink group-hover:text-seal">{affaire.numero_affaire}</Mono>
-                <span className="text-sm text-ink-soft">{affaire.description || "Aucune description."}</span>
+                <span className="truncate text-sm text-ink-soft">{htmlVersExtrait(affaire.description) || "Aucune description."}</span>
               </div>
               <Badge tone={TONE_PAR_STATUT[affaire.statut]}>{affaire.statut.replaceAll("_", " ")}</Badge>
             </Link>

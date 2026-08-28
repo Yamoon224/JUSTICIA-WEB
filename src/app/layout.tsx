@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Mono, Public_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -38,11 +39,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       // du HTML rendu côté serveur, qui ne connaît pas la préférence stockée.
       suppressHydrationWarning
     >
-      <head>
+      <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
         {/* Applique le thème choisi manuellement avant le premier rendu, pour éviter un flash du mauvais thème. */}
-        <script dangerouslySetInnerHTML={{ __html: SCRIPT_THEME_INITIAL }} />
-      </head>
-      <body className="flex min-h-full flex-col bg-paper font-sans text-ink">{children}</body>
+        <Script id="theme-initial" strategy="beforeInteractive">
+          {SCRIPT_THEME_INITIAL}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }

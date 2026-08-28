@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft, FileClock, Gavel, Lock, ScrollText, ShieldAlert, UserCog2 } from "lucide-react";
 
-import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, Select, SubmitButton, TextArea, TextInput } from "@/components/ui";
+import { RichTextArea } from "@/components/rich-text-editor";
+import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, RichText, Select, SubmitButton, TextInput } from "@/components/ui";
 import {
   actionAffecterJuge,
   actionEmettreMandat,
@@ -70,7 +71,7 @@ export default async function DossierInstructionPage({
       )}
 
       <Card title="Dossier">
-        <p className="text-sm text-ink-soft">{affaire.description || "Aucune description."}</p>
+        <RichText html={affaire.description} fallback="Aucune description." />
         <div className="flex flex-wrap gap-1.5">
           {affaire.infractions?.map((infraction) => (
             <Badge key={infraction.id} tone="seal">
@@ -167,7 +168,7 @@ export default async function DossierInstructionPage({
                   </div>
                 </div>
 
-                {mesure.obligations && <p className="text-sm text-ink-soft">{mesure.obligations}</p>}
+                <RichText html={mesure.obligations} />
                 {mesure.fin_prevue_at && (
                   <p className="text-xs text-ink-faint">
                     Échéance : {new Date(mesure.fin_prevue_at).toLocaleString("fr-FR", { dateStyle: "long" })}
@@ -222,7 +223,7 @@ export default async function DossierInstructionPage({
                 </Select>
               </Field>
               <Field label="Obligations" htmlFor="obligations">
-                <TextArea id="obligations" name="obligations" rows={2} required placeholder="Ex. Pointage hebdomadaire au commissariat." />
+                <RichTextArea id="obligations" name="obligations" rows={2} required placeholder="Ex. Pointage hebdomadaire au commissariat." />
               </Field>
               <SubmitButton variant="secondary">Placer sous contrôle</SubmitButton>
             </form>
@@ -319,7 +320,7 @@ export default async function DossierInstructionPage({
                   </span>
                   <Badge tone={acte.statut === "en_attente" ? "gold" : "forest"}>{acte.statut.replaceAll("_", " ")}</Badge>
                 </div>
-                {acte.description && <p className="text-sm text-ink-soft">{acte.description}</p>}
+                <RichText html={acte.description} />
 
                 {enCours && acte.statut === "en_attente" && (
                   <form action={actionMettreAJourActe} className="flex flex-wrap items-end gap-2">
@@ -361,7 +362,7 @@ export default async function DossierInstructionPage({
               </Field>
             </div>
             <Field label="Description" htmlFor="description-acte">
-              <TextArea id="description-acte" name="description" rows={2} placeholder="Ex. Expertise psychiatrique du mis en examen." />
+              <RichTextArea id="description-acte" name="description" rows={2} placeholder="Ex. Expertise psychiatrique du mis en examen." />
             </Field>
             <SubmitButton variant="secondary">Enregistrer l&apos;acte</SubmitButton>
           </form>

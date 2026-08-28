@@ -2,7 +2,8 @@ import Link from "next/link";
 import { ArrowLeft, FileDown, FileSignature, PackageCheck, Send, ShieldPlus, UserRound } from "lucide-react";
 
 import { FormulaireVersementPiece, ListePiecesVersees } from "@/components/pieces-versees";
-import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, PageHeader, Select, SubmitButton, TextArea, TextInput } from "@/components/ui";
+import { RichTextArea } from "@/components/rich-text-editor";
+import { Badge, Card, EmptyState, ErrorBanner, Field, Mono, PageHeader, RichText, Select, SubmitButton, TextInput } from "@/components/ui";
 import {
   actionEnregistrerMouvementScelle,
   actionEnregistrerScelle,
@@ -66,7 +67,7 @@ export default async function AffairePage({
       <ErrorBanner message={erreur} />
 
       <Card title="Dossier">
-        <p className="text-sm text-ink-soft">{affaire.description || "Aucune description."}</p>
+        <RichText html={affaire.description} fallback="Aucune description." />
         <div className="flex flex-wrap gap-1.5">
           {affaire.infractions?.map((infraction) => (
             <Badge key={infraction.id} tone="seal">
@@ -144,7 +145,7 @@ export default async function AffairePage({
                     </a>
                   </div>
                 </div>
-                <p className="whitespace-pre-wrap text-sm text-ink-soft">{pv.contenu}</p>
+                <RichText html={pv.contenu} />
 
                 {!pv.signe && (
                   <form action={actionSignerProcesVerbal} className="self-start">
@@ -158,7 +159,7 @@ export default async function AffairePage({
                   <form action={actionRectifierProcesVerbal} className="flex flex-col gap-2">
                     <input type="hidden" name="affaire_id" value={affaire.id} />
                     <input type="hidden" name="pv_id" value={pv.id} />
-                    <TextArea name="contenu" placeholder="Contenu rectifié" rows={2} required />
+                    <RichTextArea name="contenu" placeholder="Contenu rectifié" rows={2} required />
                     <SubmitButton variant="secondary">Émettre un rectificatif</SubmitButton>
                   </form>
                 )}
@@ -183,7 +184,7 @@ export default async function AffairePage({
             </Field>
           </div>
           <Field label="Contenu" htmlFor="contenu">
-            <TextArea id="contenu" name="contenu" rows={3} required placeholder="Ex. Le 27 août 2026 à 14h30, nous, officier de police judiciaire..." />
+            <RichTextArea id="contenu" name="contenu" rows={3} required placeholder="Ex. Le 27 août 2026 à 14h30, nous, officier de police judiciaire..." />
           </Field>
           <SubmitButton variant="secondary">Rédiger le PV</SubmitButton>
         </form>
